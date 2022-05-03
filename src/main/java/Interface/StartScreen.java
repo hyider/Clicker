@@ -14,6 +14,9 @@ public class StartScreen extends JFrame {
     public static int targetY;
 
     public static JLabel hitCountLabel;
+    public static JLabel timeCountLabel;
+
+    public static int timeCount = 30;
 
     public StartScreen() {
         setTitle("Start");
@@ -21,11 +24,26 @@ public class StartScreen extends JFrame {
         setContentPane(panel);
         panel.setLayout(null);
 
+        Color backGroundColor = new Color(86,187,241); // 배경색 설정
+        Color buttonColor = new Color(77,119,255); // 버튼색 설정
+
+        panel.setBackground(backGroundColor);
+
         hitCountLabel = new JLabel();
         hitCountLabel.setText("Score");
-        hitCountLabel.setLocation(0,0);
-        hitCountLabel.setSize(100,50);
+        hitCountLabel.setForeground(Color.WHITE);
+        hitCountLabel.setFont(new Font("Slab Serif",Font.BOLD,40));
+        hitCountLabel.setLocation(0,10);
+        hitCountLabel.setSize(200,100);
         panel.add(hitCountLabel);
+
+        timeCountLabel = new JLabel();
+        timeCountLabel.setText("Time : " + timeCount);
+        timeCountLabel.setForeground(Color.WHITE);
+        timeCountLabel.setFont(new Font("Slab Serif",Font.BOLD,40));
+        timeCountLabel.setLocation(210,10);
+        timeCountLabel.setSize(200,100);
+        panel.add(timeCountLabel);
 
         MouseListener mouseListener = new MouseListener() {
             @Override
@@ -65,7 +83,9 @@ public class StartScreen extends JFrame {
         setVisible(true);
 
         Target target = new Target(panel);
-        target.run();
+        target.start();
+        Timer timer = new Timer(timeCountLabel);
+        timer.start();
     }
 
     class MyPanel extends JPanel {
@@ -76,7 +96,30 @@ public class StartScreen extends JFrame {
         }
     }
 
-    class Target extends  Thread {
+    class Timer extends  Thread {
+        private JLabel timeCountLabel;
+        public Timer(JLabel timeCountLabel){
+            this.timeCountLabel = timeCountLabel;
+        }
+        public void run() {
+            while(true) {
+                timeCount--;
+                timeCountLabel.setText("Time : " + timeCount);
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    return;
+                }
+                if (timeCount == 0) {
+                    dispose();
+                    return;
+                }
+            }
+        }
+    }
+
+    class Target extends Thread {
         private MyPanel panel;
         private Graphics graphics;
 
