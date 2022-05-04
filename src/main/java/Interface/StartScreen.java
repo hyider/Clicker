@@ -69,9 +69,7 @@ public class StartScreen extends JFrame {
 
             }
             @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
+            public void mouseExited(MouseEvent e) {}
         };
         panel.addMouseListener(mouseListener);
 
@@ -132,16 +130,21 @@ public class StartScreen extends JFrame {
             while (true) {
                 targetX = ((int) (Math.random() * 1000));
                 targetY = ((int) (Math.random() * 1000));
+                JButton targetButton = new JButton();
+                targetButton.setSize(MainScreen.size*10,MainScreen.size*10);
+                targetButton.setLocation(targetX,targetY);
+                panel.add(targetButton);
                 if (timeCount == 0) {
                     return;
                 }
-                new MyPanel();
+                //new MyPanel();
                 panel.repaint();
                 System.out.println(targetX);
                 System.out.println(targetY);
 
                 try {
                     sleep(1000);
+                    panel.remove(targetButton);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
