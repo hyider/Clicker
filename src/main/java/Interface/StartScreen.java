@@ -16,7 +16,7 @@ public class StartScreen extends JFrame {
     public static JLabel hitCountLabel;
     public static JLabel timeCountLabel;
 
-    public static int timeCount = 30;
+    public static int timeCount = 10;
 
     public StartScreen() {
         setTitle("Start");
@@ -113,6 +113,7 @@ public class StartScreen extends JFrame {
                 }
                 if (timeCount == 0) {
                     dispose();
+                    timeCount=10;
                     return;
                 }
             }
@@ -135,6 +136,9 @@ public class StartScreen extends JFrame {
                 panel.repaint();
                 System.out.println(targetX);
                 System.out.println(targetY);
+                if (timeCount == 0) {
+                    return;
+                }
                 try {
                     sleep(1000);
                 } catch (InterruptedException e) {
