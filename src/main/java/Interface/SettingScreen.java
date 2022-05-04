@@ -57,8 +57,6 @@ public class SettingScreen extends JFrame {
         customLabel.setSize(300,75); // customLabel 라벨의 크기
         container.add(customLabel); // 컨텐트팬에 customLabel 라벨 부착
 
-
-
         // ==[Easy_Button]=======================================================================
         JButton easyButton = new JButton("Easy"); // easyButton 버튼 문자열과 함께 생성
         easyButton.setFont(new Font("Slab Serif",Font.BOLD,30)); // 폰트 설정
