@@ -132,13 +132,14 @@ public class StartScreen extends JFrame {
             while (true) {
                 targetX = ((int) (Math.random() * 1000));
                 targetY = ((int) (Math.random() * 1000));
+                if (timeCount == 0) {
+                    return;
+                }
                 new MyPanel();
                 panel.repaint();
                 System.out.println(targetX);
                 System.out.println(targetY);
-                if (timeCount == 0) {
-                    return;
-                }
+
                 try {
                     sleep(1000);
                 } catch (InterruptedException e) {
