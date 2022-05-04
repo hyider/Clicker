@@ -5,7 +5,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
 public class MainScreen extends JFrame {
     public static JLabel modeJLabel;
 
@@ -28,6 +27,14 @@ public class MainScreen extends JFrame {
         Container container = getContentPane(); // 프레임에 부탁된 컨텐트팬 알아내기
         container.setBackground(backGroundColor); // 컨탠트팬의 색 backGroundColor 설정
         container.setLayout(null); // 배치관리자는 없음
+
+        /**
+        JButton test = new JButton("Test");
+        test.setSize(100,100);
+        test.setLocation(350,150);
+        test.paint(container,,);
+        container.add(test);
+        **/
 
         // ====제목==========================================================================
         JLabel title = new JLabel("AimSimulator"); // title 라벨 문자열과 함께 생성
@@ -53,6 +60,7 @@ public class MainScreen extends JFrame {
         modeJLabel.setSize(200,50); // modeJLabel 라벨의 크기 설정
         container.add(modeJLabel); // 컨텐트팬에 modeJLabel 라벨 부착
 
+
         // ==[Start_버튼]=======================================================================
         JButton startButton = new JButton("Start"); // startButton 버튼 문자열과 함께 생성
         startButton.setFont(new Font("Slab Serif",Font.BOLD,50)); // 폰트 설정
@@ -65,7 +73,13 @@ public class MainScreen extends JFrame {
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new StartScreen();
+                if (modeJLabel.getText() == "Mode : Select") {
+                    JOptionPane.showMessageDialog(null,"Select Mode!","ERROR", JOptionPane.ERROR_MESSAGE);
+                    new SettingScreen();
+                    // 모드 선택 안한 상태로 Start 버튼 누르면 경고창 발생.
+                } else {
+                    new StartScreen();
+                }
             }
         });
 
