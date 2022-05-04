@@ -29,6 +29,9 @@ public class SettingScreen extends JFrame {
         size = MainScreen.size;
         speed = MainScreen.speed;
         frequency = MainScreen.frequency;
+        // 1 -> 10 *10
+        // 2 -> 9
+        // fre = 10 - (fre-1)
 
         setTitle("Setting");
 
@@ -169,7 +172,7 @@ public class SettingScreen extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 MainScreen.size = size;
                 MainScreen.speed = speed;
-                MainScreen.frequency = frequency;
+                MainScreen.frequency = 10 - (frequency-1);
                 dispose();
             }
         });

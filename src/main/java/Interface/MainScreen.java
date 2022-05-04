@@ -12,6 +12,8 @@ public class MainScreen extends JFrame {
     public static int speed;
     public static int frequency;
 
+    public static int hitCount;
+
     public MainScreen() {
         size = 5;
         speed = 5;
