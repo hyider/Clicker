@@ -12,10 +12,12 @@ public class SettingScreen extends JFrame {
     public static int size;
     public static int speed;
     public static int frequency;
+    public static int time;
 
     public static JLabel valueOfSize;
     public static JLabel valueOfSpeed;
     public static JLabel valueOfFrequency;
+    public static JLabel valueOfTime;
 
     public static JLabel customLabel;
 
@@ -24,14 +26,13 @@ public class SettingScreen extends JFrame {
     public static JSlider sizeSlider;
     public static JSlider speedSlider;
     public static JSlider frequencySlider;
+    public static JSlider timeSlider;
 
     public SettingScreen() {
         size = MainScreen.size;
         speed = MainScreen.speed;
         frequency = MainScreen.frequency;
-        // 1 -> 10 *10
-        // 2 -> 9
-        // fre = 10 - (fre-1)
+        time = MainScreen.time;
 
         setTitle("Setting");
 
@@ -173,6 +174,7 @@ public class SettingScreen extends JFrame {
                 MainScreen.size = size;
                 MainScreen.speed = speed;
                 MainScreen.frequency = 10 - (frequency-1);
+                MainScreen.time = time;
                 dispose();
             }
         });
@@ -205,7 +207,8 @@ public class SettingScreen extends JFrame {
 
 
 
-        /** Size Slider And Label **/
+        /*************************************** Size Slider And Label ***************************************/
+
         sizeSlider = new JSlider(1,10,size);
         sizeSlider.setBackground(backGroundColor);
         sizeSlider.setPaintTicks(true);
@@ -232,14 +235,15 @@ public class SettingScreen extends JFrame {
         valueOfSize.setSize(200,75); // valueOfSize 라벨의 크기
         container.add(valueOfSize); // 컨텐트팬에 valueOfSize 라벨 부착
 
-        /** Speed Slider And Label **/
+        /*************************************** Speed Slider And Label ***************************************/
+
         speedSlider = new JSlider(1,10,speed);
         speedSlider.setBackground(backGroundColor);
         speedSlider.setPaintTicks(true);
         speedSlider.setMajorTickSpacing(1);
         speedSlider.setPaintTrack(true);
         speedSlider.setPaintLabels(true);
-        speedSlider.setLocation(265,265);
+        speedSlider.setLocation(265,215);
         speedSlider.setSize(485,50);
         container.add(speedSlider);
         //speed = speedSlider.getValue();
@@ -260,14 +264,14 @@ public class SettingScreen extends JFrame {
         container.add(valueOfSpeed); // 컨텐트팬에 valueOfSpeed 라벨 부착
 
 
-        /** Frequency Slider And Label **/
+        /*************************************** Frequency Slider And Label ***************************************/
         frequencySlider = new JSlider(1,10,frequency);
         frequencySlider.setBackground(backGroundColor);
         frequencySlider.setPaintTicks(true);
         frequencySlider.setMajorTickSpacing(1);
         frequencySlider.setPaintTrack(true);
         frequencySlider.setPaintLabels(true);
-        frequencySlider.setLocation(265,365);
+        frequencySlider.setLocation(265,265);
         frequencySlider.setSize(485,50);
         container.add(frequencySlider);
         //frequency = frequencySlider.getValue();
@@ -286,6 +290,40 @@ public class SettingScreen extends JFrame {
         valueOfFrequency.setLocation(545,95); // valueOfFrequency 라벨의 위치
         valueOfFrequency.setSize(200,75); // valueOfFrequency 라벨의 크기
         container.add(valueOfFrequency); // 컨텐트팬에 valueOfFrequency 라벨 부착
+
+        /*************************************** Time Slider And Label ***************************************/
+
+        valueOfTime = new JLabel("Time : " + String.valueOf(frequency));
+        valueOfTime.setFont(new Font("Slab Serif",Font.PLAIN,30)); // 폰트 설정
+        valueOfTime.setForeground(Color.WHITE); // valueOfTime 라벨의 글씨 하얀색 설정
+        valueOfTime.setLocation(545,95); // valueOfTime 라벨의 위치
+        /** Time 라벨 위치 선정 **/
+        valueOfTime.setSize(200,75); // valueOfTime 라벨의 크기
+        container.add(valueOfTime); // 컨텐트팬에 valueOfTime 라벨 부착
+
+        timeSlider = new JSlider(10,60,time);
+        timeSlider.setBackground(backGroundColor);
+        timeSlider.setPaintTicks(true);
+        timeSlider.setMajorTickSpacing(5);
+        timeSlider.setMinorTickSpacing(1);
+        // timeSlider는 5단위로 설정할 수 있도록 만들기 (미완)
+        timeSlider.setPaintTrack(true);
+        timeSlider.setPaintLabels(true);
+        timeSlider.setLocation(265,315);
+        timeSlider.setSize(485,50);
+        container.add(timeSlider);
+        //frequency = frequencySlider.getValue();
+
+        timeSlider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                time = timeSlider.getValue();
+                valueOfTime.setText("Time : " + String.valueOf(time));
+            }
+        });
+
+
+
 
         if(modeJLabel.getText() == "Mode : Custom" || modeJLabel.getText() == "Mode : Select") {
             sizeSlider.setEnabled(true);

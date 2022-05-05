@@ -11,6 +11,7 @@ public class MainScreen extends JFrame {
     public static int size;
     public static int speed;
     public static int frequency;
+    public static int time;
 
     public static int hitCount;
 
@@ -18,6 +19,7 @@ public class MainScreen extends JFrame {
         size = 5;
         speed = 5;
         frequency = 5;
+        time = 10;
 
         setTitle("AimSimulator"); // 프로그램 타이틀 "AimSimulator"
 

@@ -2,18 +2,18 @@ package Interface;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 
 public class StartScreen extends JFrame {
-    private MyPanel panel = new MyPanel();
-
     public static int hitCount = 0;
+    public static int missCount = 0;
+    public static int totalCount = 0;
+    public static int timeCount = MainScreen.time;
 
     public static int targetX;
     public static int targetY;
+
+    public static int newThread;
 
     public static JButton targetButton;
 
@@ -23,20 +23,21 @@ public class StartScreen extends JFrame {
 
 
     public static JLabel hitCountLabel;
+    public static JLabel missCOuntLabel;
     public static JLabel timeCountLabel;
 
-    public static int timeCount = 3;
+
 
     public StartScreen() {
         setTitle("Start");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setContentPane(panel);
-        panel.setLayout(null);
+        Container container = getContentPane();
+        container.setLayout(null);
 
         Color backGroundColor = new Color(86, 187, 241); // 배경색 설정
         Color buttonColor = new Color(77, 119, 255); // 버튼색 설정
 
-        panel.setBackground(backGroundColor);
+        container.setBackground(backGroundColor);
 
         hitCountLabel = new JLabel();
         hitCountLabel.setText("Score : " + hitCount);
@@ -44,7 +45,15 @@ public class StartScreen extends JFrame {
         hitCountLabel.setFont(new Font("Slab Serif", Font.BOLD, 40));
         hitCountLabel.setLocation(5, 0);
         hitCountLabel.setSize(200, 50);
-        panel.add(hitCountLabel);
+        container.add(hitCountLabel);
+
+        missCOuntLabel = new JLabel();
+        missCOuntLabel.setText("Miss : " + missCount);
+        missCOuntLabel.setForeground(Color.WHITE);
+        missCOuntLabel.setFont(new Font("Slab Serif", Font.BOLD, 40));
+        missCOuntLabel.setLocation(600,0);
+        missCOuntLabel.setSize(200,50);
+        container.add(missCOuntLabel);
 
         timeCountLabel = new JLabel();
         timeCountLabel.setText("Time : " + timeCount);
@@ -52,40 +61,7 @@ public class StartScreen extends JFrame {
         timeCountLabel.setFont(new Font("Slab Serif", Font.BOLD, 40));
         timeCountLabel.setLocation(215, 0);
         timeCountLabel.setSize(200, 50);
-        panel.add(timeCountLabel);
-
-        MouseListener mouseListener = new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                int x = e.getX();
-                int y = e.getY();
-
-                if (x > 50 && x < 100 && y > 50 && y < 100) {
-                    hitCount++;
-                    hitCountLabel.setText("Score : " + hitCount);
-                    System.out.println(hitCount);
-                }
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
-        };
-        panel.addMouseListener(mouseListener);
+        container.add(timeCountLabel);
 
         setSize(800, 800);
         // ***************************************************************************
@@ -94,18 +70,10 @@ public class StartScreen extends JFrame {
         // ***************************************************************************
         setVisible(true);
 
-        Target target = new Target(panel);
+        Target target = new Target(container);
         target.start();
         Timer timer = new Timer(timeCountLabel);
         timer.start();
-    }
-
-    class MyPanel extends JPanel {
-        public void paintComponent(Graphics graphics) {
-            super.paintComponent(graphics);
-            //graphics.setColor(Color.RED);
-            //graphics.fillRect(targetX, targetY, 50, 50);
-        }
     }
 
     class Timer extends Thread {
@@ -114,8 +82,6 @@ public class StartScreen extends JFrame {
         public Timer(JLabel timeCountLabel) {
             this.timeCountLabel = timeCountLabel;
         }
-
-
         public void run() {
             try {
                 sleep(3000);
@@ -133,9 +99,11 @@ public class StartScreen extends JFrame {
                 }
                 if (timeCount == 0) {
                     dispose();
-                    timeCount = 3;
-                    MainScreen.hitCount = hitCount;
+                    new ScoreScreen();
+                    timeCount = MainScreen.time;
                     hitCount = 0;
+                    missCount = 0;
+                    totalCount = 0;
                     return;
                 }
             }
@@ -143,6 +111,10 @@ public class StartScreen extends JFrame {
     }
 
     class RandomMove extends Thread {
+        private Container container;
+        RandomMove(Container container) {
+            this.container = container;
+        }
         public void run() {
             /**
             selectMoveToCrossOrDiagonal = ((int)(Math.random()*10));
@@ -179,11 +151,11 @@ public class StartScreen extends JFrame {
                     break;
             }
             **/
-
             selectMoveToCrossOrDiagonal = ((int)(Math.random()*10))%2;
             selectMoveX = ((int)(Math.random()*10))%2;
             selectMoveY = ((int)(Math.random()*10))%2;
 
+            // 변수 이름 재설정 selectMoveX , selectMoveY
             while(true) {
                 switch (selectMoveToCrossOrDiagonal) {
                     case 0:
@@ -191,40 +163,39 @@ public class StartScreen extends JFrame {
                         // Y가 0이면 양수, 1이면 음수
                         if ( selectMoveX == 0 && selectMoveY == 0) {
                             targetButton.setLocation(targetX,targetY++);
-                            panel.repaint();
+                            container.repaint();
                         } else if ( selectMoveX == 0 && selectMoveY == 1) {
                             targetButton.setLocation(targetX,targetY--);
-                            panel.repaint();
+                            container.repaint();
                         } else if ( selectMoveX == 1 && selectMoveY == 0) {
                             targetButton.setLocation(targetX--,targetY);
-                            panel.repaint();
+                            container.repaint();
                         } else if ( selectMoveX == 1 && selectMoveY == 1) {
                             targetButton.setLocation(targetX--,targetY);
-                            panel.repaint();
+                            container.repaint();
                         }
                     case 1:
                         // 0일 때는 양수 [우상], 1일 때는 음수 [좌하]
                         if ( selectMoveX == 0 && selectMoveY == 0) {
                             targetButton.setLocation(targetX++,targetY++);
-                            panel.repaint();
+                            container.repaint();
                         } else if ( selectMoveX == 0 && selectMoveY == 1) {
                             targetButton.setLocation(targetX++,targetY--);
-                            panel.repaint();
+                            container.repaint();
                         } else if ( selectMoveX == 1 && selectMoveY == 0) {
                             targetButton.setLocation(targetX--,targetY++);
-                            panel.repaint();
+                            container.repaint();
                         } else if ( selectMoveX == 1 && selectMoveY == 1) {
                             targetButton.setLocation(targetX--,targetY--);
-                            panel.repaint();
+                            container.repaint();
                         }
                 }
-
                 targetButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         hitCount++;
                         hitCountLabel.setText("Score : "+hitCount);
-                        panel.remove(targetButton);
+                        container.remove(targetButton);
                         return;
                     }
                 });
@@ -233,17 +204,24 @@ public class StartScreen extends JFrame {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                newThread = newThread + 50;
+                if (newThread == 1000 - (11 - MainScreen.frequency) * 50) {
+                    newThread = 0;
+                    return;
+                }
             }
         }
     }
 
     class Target extends Thread {
-        private MyPanel panel;
-        private RandomMove randomMove = new RandomMove();
+        private Container container;
+        private RandomMove randomMove = new RandomMove(container);
 
-        public Target(MyPanel panel) {
-            this.panel = panel;
+        public Target(Container container) {
+            this.container = container;
         }
+
+        Color backGroundColor = new Color(86, 187, 241); // 배경색 설정
 
         public static JLabel readyLabel;
 
@@ -268,38 +246,102 @@ public class StartScreen extends JFrame {
                 readyLabel.setSize(200, 50);
                 readyLabel.setLocation(300, 400);
                 readyLabel.setForeground(Color.WHITE);
-                panel.add(readyLabel);
+                container.add(readyLabel);
                 try {
                     sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                panel.remove(readyLabel);
-                panel.repaint();
+                container.remove(readyLabel);
+                container.repaint();
             }
+
+            container.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    missCount++;
+                    missCOuntLabel.setText("Miss : " + missCount);
+                    container.repaint();
+                }
+            });
+
             while (true) {
                 targetX = ((int) (Math.random() * 700));
                 targetY = ((int) (Math.random() * 700));
+
                 targetButton = new JButton();
                 targetButton.setSize((MainScreen.size + 10) * 5, (MainScreen.size + 10) * 5);
                 targetButton.setLocation(targetX, targetY);
-                panel.add(targetButton);
+                container.add(targetButton);
+                targetButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        hitCount++;
+                        hitCountLabel.setText("Score : "+hitCount);
+                        container.remove(targetButton);
+                        container.repaint();
+                    }
+                });
 
-                randomMove.start();
+                totalCount++;
 
+                //randomMove.start();
 
+                container.repaint();
 
                 if (timeCount == 0) {
+                    ScoreScreen.percent = ((double)hitCount/(double)totalCount)*100;
+                    ScoreScreen.totalCount = totalCount;
+                    ScoreScreen.hitCount = hitCount;
+                    ScoreScreen.missCount = missCount;
                     return;
                 }
-                //new MyPanel();
 
                 try {
                     sleep(1000 - (11 - MainScreen.frequency) * 50);
-                    panel.remove(targetButton);
+                    container.remove(targetButton);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
+                /**
+                 JButton backgroundButton = new JButton();
+                 backgroundButton.setBackground(backGroundColor);
+                 backgroundButton.setForeground(backGroundColor);
+                 backgroundButton.setLocation(0,50);
+                 backgroundButton.setSize(800,750);
+                 panel.add(backgroundButton);
+                 backgroundButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                missCount++;
+                missCOuntLabel.setText("Miss : "+missCount);
+                }
+                });
+
+                 targetButton.requestFocus();
+
+                 backgroundButton.setVisible(false);
+                 **/
+                /**
+                 panel.addMouseListener(new MouseListener() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                if(e.getClickCount() == 1) {
+                missCount++;
+                missCOuntLabel.setText("Miss : "+missCount);
+                }
+                }
+                public void mousePressed(MouseEvent e) {}
+                public void mouseReleased(MouseEvent e) {
+
+                }
+                public void mouseEntered(MouseEvent e) {}
+                public void mouseExited(MouseEvent e) {}
+                });
+                 **/
+
             }
         }
     }
