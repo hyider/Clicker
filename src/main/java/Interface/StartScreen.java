@@ -15,10 +15,12 @@ public class StartScreen extends JFrame {
     public static int targetX;
     public static int targetY;
 
-    public static int selectVector;
-    public static int selectVectorX;
-    public static int selectVectorY;
-    public static int moveY;
+    public static JButton targetButton;
+
+    public static int selectMoveToCrossOrDiagonal;
+    public static int selectMoveX;
+    public static int selectMoveY;
+
 
     public static JLabel hitCountLabel;
     public static JLabel timeCountLabel;
@@ -140,9 +142,104 @@ public class StartScreen extends JFrame {
         }
     }
 
+    class RandomMove extends Thread {
+        public void run() {
+            /**
+            selectMoveToCrossOrDiagonal = ((int)(Math.random()*10));
+            selectMoveToCrossOrDiagonal = selectMoveToCrossOrDiagonal%2;
+            // 0이면 십자, 1이면 대각
+            switch (selectMoveToCrossOrDiagonal) {
+                case 0:
+                    selectMoveX = ((int)(Math.random()*10));
+                    selectMoveX = selectMoveX%2;
+                    switch (selectMoveX) {
+                        case 0:
+                            selectMoveY = ((int)(Math.random()*10));
+                            selectMoveY = selectMoveY%2;
+                            break;
+                        case 1:
+                            selectMoveY = ((int)(Math.random()*10));
+                            selectMoveY = selectMoveY%2;
+                            break;
+                    }
+                    break;
+                case 1:
+                    selectMoveX = ((int)(Math.random()*10));
+                    selectMoveX = selectMoveX%2;
+                    switch (selectMoveX) {
+                        case 0:
+                            selectMoveY = ((int)(Math.random()*10));
+                            selectMoveY = selectMoveY%2;
+                            break;
+                        case 1:
+                            selectMoveY = ((int)(Math.random()*10));
+                            selectMoveY = selectMoveY%2;
+                            break;
+                    }
+                    break;
+            }
+            **/
+
+            selectMoveToCrossOrDiagonal = ((int)(Math.random()*10))%2;
+            selectMoveX = ((int)(Math.random()*10))%2;
+            selectMoveY = ((int)(Math.random()*10))%2;
+
+            while(true) {
+                switch (selectMoveToCrossOrDiagonal) {
+                    case 0:
+                        // X가 0이면 Y축, 1이면 X축
+                        // Y가 0이면 양수, 1이면 음수
+                        if ( selectMoveX == 0 && selectMoveY == 0) {
+                            targetButton.setLocation(targetX,targetY++);
+                            panel.repaint();
+                        } else if ( selectMoveX == 0 && selectMoveY == 1) {
+                            targetButton.setLocation(targetX,targetY--);
+                            panel.repaint();
+                        } else if ( selectMoveX == 1 && selectMoveY == 0) {
+                            targetButton.setLocation(targetX--,targetY);
+                            panel.repaint();
+                        } else if ( selectMoveX == 1 && selectMoveY == 1) {
+                            targetButton.setLocation(targetX--,targetY);
+                            panel.repaint();
+                        }
+                    case 1:
+                        // 0일 때는 양수 [우상], 1일 때는 음수 [좌하]
+                        if ( selectMoveX == 0 && selectMoveY == 0) {
+                            targetButton.setLocation(targetX++,targetY++);
+                            panel.repaint();
+                        } else if ( selectMoveX == 0 && selectMoveY == 1) {
+                            targetButton.setLocation(targetX++,targetY--);
+                            panel.repaint();
+                        } else if ( selectMoveX == 1 && selectMoveY == 0) {
+                            targetButton.setLocation(targetX--,targetY++);
+                            panel.repaint();
+                        } else if ( selectMoveX == 1 && selectMoveY == 1) {
+                            targetButton.setLocation(targetX--,targetY--);
+                            panel.repaint();
+                        }
+                }
+
+                targetButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        hitCount++;
+                        hitCountLabel.setText("Score : "+hitCount);
+                        panel.remove(targetButton);
+                        return;
+                    }
+                });
+                try {
+                    sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     class Target extends Thread {
         private MyPanel panel;
-        private Graphics graphics;
+        private RandomMove randomMove = new RandomMove();
 
         public Target(MyPanel panel) {
             this.panel = panel;
@@ -151,20 +248,22 @@ public class StartScreen extends JFrame {
         public static JLabel readyLabel;
 
         public void run() {
-            String second = null;
+            String readyCount = null;
+
+            // 게임 시작 카운트다운 스레드로 만들 수 있으면 만들기
             for (int i = 3; i > 0; i--) {
                 switch (i) {
                     case 1:
-                        second = " One";
+                        readyCount = " One";
                         break;
                     case 2:
-                        second = " Two";
+                        readyCount = " Two";
                         break;
                     case 3:
-                        second = "Three";
+                        readyCount = "Three";
                         break;
                 }
-                readyLabel = new JLabel(second);
+                readyLabel = new JLabel(readyCount);
                 readyLabel.setFont(new Font("Slab Serif", Font.BOLD, 50));
                 readyLabel.setSize(200, 50);
                 readyLabel.setLocation(300, 400);
@@ -179,50 +278,17 @@ public class StartScreen extends JFrame {
                 panel.repaint();
             }
             while (true) {
-
-                System.out.println(selectVectorX);
-                System.out.println(selectVectorY);
                 targetX = ((int) (Math.random() * 700));
                 targetY = ((int) (Math.random() * 700));
-                JButton targetButton = new JButton();
+                targetButton = new JButton();
                 targetButton.setSize((MainScreen.size + 10) * 5, (MainScreen.size + 10) * 5);
                 targetButton.setLocation(targetX, targetY);
                 panel.add(targetButton);
 
-                // 0일 때는 양수 [우상], 1일 때는 음수 [좌하]
-                selectVectorX = ((int)(Math.random()*10));
-                selectVectorX = selectVectorX%2;
+                randomMove.start();
 
-                switch (selectVectorX) {
-                    case 0:
-                        selectVectorY = ((int)(Math.random()*10));
-                        selectVectorY = selectVectorY%2;
-                        break;
-                    case 1:
-                        selectVectorY = ((int)(Math.random()*10));
-                        selectVectorY = selectVectorY%2;
-                        break;
-                }
 
-                if ( selectVectorX == 0 && selectVectorY == 0) {
-                    targetButton.setLocation(targetX++,targetY++);
-                } else if ( selectVectorX == 0 && selectVectorY == 1) {
-                    targetButton.setLocation(targetX++,targetY--);
-                } else if ( selectVectorX == 1 && selectVectorY == 0) {
-                    targetButton.setLocation(targetX--,targetY++);
-                } else if ( selectVectorX == 1 && selectVectorY == 1) {
-                    targetButton.setLocation(targetX--,targetY--);
-                }
 
-                targetButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        hitCount++;
-                        hitCountLabel.setText("Score : "+hitCount);
-                        panel.remove(targetButton);
-                    }
-                });
-                panel.repaint();
                 if (timeCount == 0) {
                     return;
                 }
