@@ -6,7 +6,7 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 
-import static Interface.MainScreen.modeJLabel;
+import static Interface.MainScreen.*;
 
 public class SettingScreen extends JFrame {
     public static int size;
@@ -31,21 +31,17 @@ public class SettingScreen extends JFrame {
     public SettingScreen() {
         size = MainScreen.size;
         speed = MainScreen.speed;
-        frequency = MainScreen.frequency;
+        frequency = frequencySliderShow;
         time = MainScreen.time;
 
         setTitle("Setting");
-
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        Color backGroundColor = new Color(86,187,241); // 배경색 설정
-        Color buttonColor = new Color(77,119,255); // 버튼색 설정
 
         Container container = getContentPane(); // 프레임에 부탁된 컨텐트팬 알아내기
         container.setBackground(backGroundColor); // 컨탠트팬의 색 backGroundColor 설정
         container.setLayout(null); // 배치관리자는 없음
 
-        // ====제목==========================================================================
+        // ====[Title_Label]==========================================================================
         JLabel title = new JLabel("Setting"); // title 라벨 문자열과 함께 생성
         title.setFont(new Font("Slab Serif",Font.ITALIC,60)); // 폰트 설정
         title.setForeground(Color.WHITE); // title 라벨의 글씨 하얀색 설정
@@ -53,306 +49,183 @@ public class SettingScreen extends JFrame {
         title.setSize(200,75); // title 라벨의 크기
         container.add(title); // 컨텐트팬에 title 라벨 부착
 
-        // ===[Mode_Label]==========================================================================
+        // ====[Mode_Label]==========================================================================
         customLabel = new JLabel(modeJLabel.getText()); // customLabel 라벨 문자열과 함께 생성
-        customLabel.setFont(new Font("Slab Serif",Font.PLAIN,40)); // 폰트 설정
-        customLabel.setForeground(Color.WHITE); // customLabel 라벨의 글씨 하얀색 설정
-        customLabel.setLocation(400,15); // customLabel 라벨의 위치
-        customLabel.setSize(300,75); // customLabel 라벨의 크기
+        settingPlainLabel(customLabel,400,15,300,75,40);
         container.add(customLabel); // 컨텐트팬에 customLabel 라벨 부착
 
-        // ==[Easy_Button]=======================================================================
+        // ====[Easy_Button]=======================================================================
         JButton easyButton = new JButton("Easy"); // easyButton 버튼 문자열과 함께 생성
-        easyButton.setFont(new Font("Slab Serif",Font.BOLD,30)); // 폰트 설정
-        easyButton.setForeground(Color.WHITE); // easyButton 버튼의 글씨 하얀색 설정
-        easyButton.setBackground(buttonColor); // easyButton 버튼의 배경색 설정
-        easyButton.setLocation(35,115); // easyButton 버튼의 위치
-        easyButton.setSize(150,50); // easyButton 버튼의 크기
+        settingButton(easyButton,35,115,150,50,30);
         container.add(easyButton); // 컨텐트팬에 easyButton 버튼 부착
+        clickEvent(easyButton,"Mode : Easy", 10, 1, 1, false);
 
-        easyButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                modeJLabel.setText("Mode : Easy");
-                customLabel.setText("Mode : Easy");
-                sizeSlider.setValue(10);
-                sizeSlider.setEnabled(false);
-                speedSlider.setValue(1);
-                speedSlider.setEnabled(false);
-                frequencySlider.setValue(1);
-                frequencySlider.setEnabled(false);
-                saveButton.setEnabled(true);
-            }
-        });
-
-        // ==[Normal_Button]=======================================================================
+        // ====[Normal_Button]=======================================================================
         JButton normalButton = new JButton("Normal"); // normalButton 버튼 문자열과 함께 생성
-        normalButton.setFont(new Font("Slab Serif",Font.BOLD,30)); // 폰트 설정
-        normalButton.setForeground(Color.WHITE); // normalButton 버튼의 글씨 하얀색 설정
-        normalButton.setBackground(buttonColor); // normalButton 버튼의 배경색 설정
-        normalButton.setLocation(35,175); // normalButton 버튼의 위치
-        normalButton.setSize(150,50); // normalButton 버튼의 크기
+        settingButton(normalButton,35,175,150,50,30);
         container.add(normalButton); // 컨텐트팬에 normalButton 버튼 부착
+        clickEvent(normalButton,"Mode : Normal",5,5,5,false);
 
-        normalButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                modeJLabel.setText("Mode : Normal");
-                customLabel.setText("Mode : Normal");
-                sizeSlider.setValue(5);
-                sizeSlider.setEnabled(false);
-                speedSlider.setValue(5);
-                speedSlider.setEnabled(false);
-                frequencySlider.setValue(5);
-                frequencySlider.setEnabled(false);
-                saveButton.setEnabled(true);
-            }
-        });
-
-        // ==[Hard_Button]=======================================================================
+        // ====[Hard_Button]=======================================================================
         JButton hardButton = new JButton("Hard"); // hardButton 버튼 문자열과 함께 생성
-        hardButton.setFont(new Font("Slab Serif",Font.BOLD,30)); // 폰트 설정
-        hardButton.setForeground(Color.WHITE); // hardButton 버튼의 글씨 하얀색 설정
-        hardButton.setBackground(buttonColor); // hardButton 버튼의 배경색 설정
-        hardButton.setLocation(35,235); // hardButton 버튼의 위치
-        hardButton.setSize(150,50); // hardButton 버튼의 크기
+        settingButton(hardButton,35,235,150,50,30);
         container.add(hardButton); // 컨텐트팬에 hardButton 버튼 부착
+        clickEvent(hardButton,"Mode : Hard", 1, 10, 10, false);
 
-        hardButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                modeJLabel.setText("Mode : Hard");
-                customLabel.setText("Mode : Hard");
-                sizeSlider.setValue(1);
-                sizeSlider.setEnabled(false);
-                speedSlider.setValue(10);
-                speedSlider.setEnabled(false);
-                frequencySlider.setValue(10);
-                frequencySlider.setEnabled(false);
-                saveButton.setEnabled(true);
-            }
-        });
-
-        // ==[Custom_Button]=======================================================================
+        // ====[Custom_Button]=======================================================================
         JButton customButton = new JButton("Custom"); // customButton 버튼 문자열과 함께 생성
-        customButton.setFont(new Font("Slab Serif",Font.BOLD,30)); // 폰트 설정
-        customButton.setForeground(Color.WHITE); // customButton 버튼의 글씨 하얀색 설정
-        customButton.setBackground(buttonColor); // customButton 버튼의 배경색 설정
-        customButton.setLocation(35,295); // customButton 버튼의 위치
-        customButton.setSize(150,50); // customButton 버튼의 크기
+        settingButton(customButton,35,295,150,50,30);
         container.add(customButton); // 컨텐트팬에 customButton 버튼 부착
-
-        customButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                modeJLabel.setText("Mode : Custom");
-                customLabel.setText("Mode : Custom");
-                saveButton.setEnabled(true);
-                sizeSlider.setEnabled(true);
-                speedSlider.setEnabled(true);
-                frequencySlider.setEnabled(true);
-            }
-        });
+        clickEvent(customButton,"Mode : Custom", size, speed, frequency, true);
 
         // ==[Save_Button]=======================================================================
         saveButton = new JButton("Save"); // saveButton 버튼 문자열과 함께 생성
-        saveButton.setFont(new Font("Slab Serif",Font.BOLD,30)); // 폰트 설정
-        saveButton.setForeground(Color.WHITE); // saveButton 버튼의 글씨 하얀색 설정
-        saveButton.setBackground(buttonColor); // saveButton 버튼의 배경색 설정
-        saveButton.setLocation(35,355); // saveButton 버튼의 위치
-        saveButton.setSize(150,50); // saveButton 버튼의 크기
+        settingButton(saveButton,35,355,150,50,30);
         container.add(saveButton); // 컨텐트팬에 saveButton 버튼 부착
-
         if (modeJLabel.getText() == "Mode : Select")
             saveButton.setEnabled(false);
         else
             saveButton.setEnabled(true);
-
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MainScreen.size = size;
                 MainScreen.speed = speed;
+                frequencySliderShow = frequency;
                 MainScreen.frequency = 10 - (frequency-1);
                 MainScreen.time = time;
                 dispose();
             }
         });
 
-
-
-
-
-
-        /**
-        JSlider [] valueSlider = new JSlider[3];
-        for(int i=0; i<valueSlider.length(); i++) {
-            valueSlider[i] = new JSlider(0,10,5);
-            valueSlider[i].setBackground(backGroundColor);
-            valueSlider[i].setPaintTicks(true);
-            valueSlider[i].setPaintTrack(true);
-            valueSlider[i].setPaintLabels(true);
-            valueSlider[i].setMajorTickSpacing(1);
-            valueSlider[i].setLocation(265,165+(i*100));
-            valueSlider[i].setSize(485,50);
-            valueSlider[i].addChangeListener(new MyChangeListener());
-            container.add(valueSlider[i]);
-        }
-
-        size = valueSlider[0].getValue();
-        speed = valueSlider[1].getValue();
-        frequency = valueSlider[2].getValue();
-        **/
-
-
-
-
-        /*************************************** Size Slider And Label ***************************************/
-
+        // ====[Size_Slider]=================================================================================
         sizeSlider = new JSlider(1,10,size);
-        sizeSlider.setBackground(backGroundColor);
-        sizeSlider.setPaintTicks(true);
-        sizeSlider.setMajorTickSpacing(1);
-        sizeSlider.setPaintTrack(true);
-        sizeSlider.setPaintLabels(true);
-        sizeSlider.setLocation(265,165);
-        sizeSlider.setSize(485,50);
+        settingSlider(sizeSlider,265,165,485,50,1);
         container.add(sizeSlider);
-        //size = sizeSlider.getValue();
-
-        sizeSlider.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                size = sizeSlider.getValue();
-                valueOfSize.setText("Size : " + String.valueOf(size));
-            }
-        });
-
+        sizeSlider.setName("sizeSlider");
+        changeEventSlider(sizeSlider);
+        // ====[Size_Label]===================================================================================
         valueOfSize = new JLabel("Size : " + String.valueOf(size));
-        valueOfSize.setFont(new Font("Slab Serif",Font.PLAIN,30)); // 폰트 설정
-        valueOfSize.setForeground(Color.WHITE); // valueOfSize 라벨의 글씨 하얀색 설정
-        valueOfSize.setLocation(265,95); // valueOfSize 라벨의 위치
-        valueOfSize.setSize(200,75); // valueOfSize 라벨의 크기
+        settingPlainLabel(valueOfSize,265,95,200,75,30);
         container.add(valueOfSize); // 컨텐트팬에 valueOfSize 라벨 부착
 
-        /*************************************** Speed Slider And Label ***************************************/
-
+        // ====[Speed_Slider]=================================================================================
         speedSlider = new JSlider(1,10,speed);
-        speedSlider.setBackground(backGroundColor);
-        speedSlider.setPaintTicks(true);
-        speedSlider.setMajorTickSpacing(1);
-        speedSlider.setPaintTrack(true);
-        speedSlider.setPaintLabels(true);
-        speedSlider.setLocation(265,215);
-        speedSlider.setSize(485,50);
+        settingSlider(speedSlider,265,215,485,50,1);
         container.add(speedSlider);
-        //speed = speedSlider.getValue();
-
-        speedSlider.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                speed = speedSlider.getValue();
-                valueOfSpeed.setText("Speed : " + String.valueOf(speed));
-            }
-        });
-
+        speedSlider.setName("speedSlider");
+        changeEventSlider(speedSlider);
+        // ====[Speed_Label]===================================================================================
         valueOfSpeed = new JLabel("Speed : " + String.valueOf(speed));
-        valueOfSpeed.setFont(new Font("Slab Serif",Font.PLAIN,30)); // 폰트 설정
-        valueOfSpeed.setForeground(Color.WHITE); // valueOfSpeed 라벨의 글씨 하얀색 설정
-        valueOfSpeed.setLocation(395,95); // valueOfSpeed 라벨의 위치
-        valueOfSpeed.setSize(200,75); // valueOfSpeed 라벨의 크기
+        settingPlainLabel(valueOfSpeed,395,95,200,75,30);
         container.add(valueOfSpeed); // 컨텐트팬에 valueOfSpeed 라벨 부착
 
-
-        /*************************************** Frequency Slider And Label ***************************************/
+        // ====[Frequency_Slider]===================================================================================
         frequencySlider = new JSlider(1,10,frequency);
-        frequencySlider.setBackground(backGroundColor);
-        frequencySlider.setPaintTicks(true);
-        frequencySlider.setMajorTickSpacing(1);
-        frequencySlider.setPaintTrack(true);
-        frequencySlider.setPaintLabels(true);
-        frequencySlider.setLocation(265,265);
-        frequencySlider.setSize(485,50);
+        settingSlider(frequencySlider,265,265,485,50,1);
         container.add(frequencySlider);
-        //frequency = frequencySlider.getValue();
-
-        frequencySlider.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                frequency = frequencySlider.getValue();
-                valueOfFrequency.setText("Frequency : " + String.valueOf(frequency));
-            }
-        });
-
+        frequencySlider.setName("frequencySlider");
+        changeEventSlider(frequencySlider);
+        // ====[Frequency_Label]===================================================================================
         valueOfFrequency = new JLabel("Frequency : " + String.valueOf(frequency));
-        valueOfFrequency.setFont(new Font("Slab Serif",Font.PLAIN,30)); // 폰트 설정
-        valueOfFrequency.setForeground(Color.WHITE); // valueOfFrequency 라벨의 글씨 하얀색 설정
-        valueOfFrequency.setLocation(545,95); // valueOfFrequency 라벨의 위치
-        valueOfFrequency.setSize(200,75); // valueOfFrequency 라벨의 크기
+        settingPlainLabel(valueOfFrequency,545,95,200,75,30);
         container.add(valueOfFrequency); // 컨텐트팬에 valueOfFrequency 라벨 부착
 
-        /*************************************** Time Slider And Label ***************************************/
-
-        valueOfTime = new JLabel("Time : " + String.valueOf(frequency));
-        valueOfTime.setFont(new Font("Slab Serif",Font.PLAIN,30)); // 폰트 설정
-        valueOfTime.setForeground(Color.WHITE); // valueOfTime 라벨의 글씨 하얀색 설정
-        valueOfTime.setLocation(545,95); // valueOfTime 라벨의 위치
-        /** Time 라벨 위치 선정 **/
-        valueOfTime.setSize(200,75); // valueOfTime 라벨의 크기
-        container.add(valueOfTime); // 컨텐트팬에 valueOfTime 라벨 부착
-
+        // ====[Time_Slider]===================================================================================
         timeSlider = new JSlider(10,60,time);
-        timeSlider.setBackground(backGroundColor);
-        timeSlider.setPaintTicks(true);
+        settingSlider(timeSlider,265,315,485,50, 5);
+        timeSlider.setName("timeSlider");
         timeSlider.setMajorTickSpacing(5);
         timeSlider.setMinorTickSpacing(1);
-        // timeSlider는 5단위로 설정할 수 있도록 만들기 (미완)
-        timeSlider.setPaintTrack(true);
-        timeSlider.setPaintLabels(true);
-        timeSlider.setLocation(265,315);
-        timeSlider.setSize(485,50);
         container.add(timeSlider);
-        //frequency = frequencySlider.getValue();
+        changeEventSlider(timeSlider);
+        // ====[Time_Label]===================================================================================
+        valueOfTime = new JLabel("Time : " + String.valueOf(frequency));
+        settingPlainLabel(valueOfTime,545,95,200,75,30); // 타임라벨 위치 재선정
+        container.add(valueOfTime); // 컨텐트팬에 valueOfTime 라벨 부착
 
-        timeSlider.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                time = timeSlider.getValue();
-                valueOfTime.setText("Time : " + String.valueOf(time));
-            }
-        });
-
-
-
-
+        // modeJLabel의 텍스트가 "Mode : Custom" 이거나 "Mode : Select" 일 떄
+        // Mode를 설정하지 않았거나 커스텀 모드일 때
         if(modeJLabel.getText() == "Mode : Custom" || modeJLabel.getText() == "Mode : Select") {
+            // JSlider 3개 활성화
             sizeSlider.setEnabled(true);
             speedSlider.setEnabled(true);
             frequencySlider.setEnabled(true);
         } else {
+            // JSlider 3개 비활성화
             sizeSlider.setEnabled(false);
             speedSlider.setEnabled(false);
             frequencySlider.setEnabled(false);
         }
 
-        setSize(800,500); // 창의 크기 설정
-        setResizable(false);
-        setLocationRelativeTo(null);
-        setVisible(true); // 화면에 창을 나타냄
-
-
+        // 창 설정
+        settingScreen(800,500,false,null,true);
     }
 
-    /**
-    class MyChangeListener implements ChangeListener {
-        @Override
-        public void stateChanged(ChangeEvent e) {
-            size = valueSlider[0].getValue();
-            speed = valueSlider[1].getValue();
-            frequency = valueSlider[2].getValue();
-        }
+    public void settingScreen(int sizeX, int sizeY, boolean resizable, Component locationRelativeTo, boolean visible) {
+        setSize(sizeX,sizeY); // 창의 x,y 크기 인자로 받아 설정
+        setResizable(resizable); // 창의 크기 변경 여부 인자로 받아 설정
+        setLocationRelativeTo(locationRelativeTo); // 창의 상대적 위치 인자로 받아 설정
+        setVisible(visible); // 창을 띄우는 여부 인자로 받아 설정
     }
-     **/
+
+    public void clickEvent (JButton buttonName, String modeSet, int sizeValue, int speedValue, int frequencyValue, boolean enabled) {
+        buttonName.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                modeJLabel.setText(modeSet); // modeJLabel의 텍스트 인자로 받아 설정
+                customLabel.setText(modeSet); // customLabel의 텍스트 인자로 받아 설정
+
+                sizeSlider.setValue(sizeValue); // sizeSlider의 값 인자로 받아 설정
+                speedSlider.setValue(speedValue); // speedSlider의 값 인자로 받아 설정
+                frequencySlider.setValue(frequencyValue); // frequency의 값 인자로 받아 설정
+
+                sizeSlider.setEnabled(enabled); // sizeSlider 가동 여부 인자로 받아 설정
+                speedSlider.setEnabled(enabled); // speedSlider 가동 여부 인자로 받아 설정
+                frequencySlider.setEnabled(enabled); // frequencySlider 가동 여부 인자로 받아 설정
+
+                saveButton.setEnabled(true); // saveButton 가동 여부 인자로 받아 설정
+            }
+        });
+    }
+
+    public void settingSlider (JSlider sliderName, int locationX, int locationY, int sizeX, int sizeY, int tickSpacing) {
+        sliderName.setBackground(backGroundColor); // JSlider의 배경색 설정
+        sliderName.setPaintTicks(true); // JSlider의 눈금 보이게 설정
+        sliderName.setPaintTrack(true); // JSlider의 슬라이드바 보이게 설정
+        sliderName.setPaintLabels(true); // JSlider의 숫자 보이게 설정
+        sliderName.setMajorTickSpacing(tickSpacing); // JSlider의 눈금 간격 인자로 받아 설정
+        sliderName.setLocation(locationX,locationY); // JSlider의 위치 인자로 받아 설정
+        sliderName.setSize(sizeX,sizeY); // JSlider의 크기 인자로 받아 설정
+    }
+
+    public void changeEventSlider (JSlider sliderName) {
+        sliderName.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                switch (sliderName.getName()) { //
+                    case "sizeSlider": // sliderName의 이름이 sizeSlider 일 때
+                        size = sliderName.getValue(); // size에 sliderName의 현재 값 전달
+                        valueOfSize.setText("Size : " + String.valueOf(size)); // valueOfSize의 텍스트 수정
+                        break;
+                    case "speedSlider": // sliderName의 이름이 speedSlider 일 때
+                        speed = sliderName.getValue(); // speed에 sliderName의 현재 값 전달
+                        valueOfSpeed.setText("Speed : " + String.valueOf(speed)); // valueOfSpeed의 텍스트 수정
+                        break;
+                    case "frequencySlider": // sliderName의 이름이 frequencySlider 일 때
+                        frequency = sliderName.getValue();  // frequency에 sliderName의 현재 값 전달
+                        valueOfFrequency.setText("Frequency : " + String.valueOf(frequency)); // valueOfFrequency의 텍스트 수정
+                        break;
+                    case "timeSlider": // sliderName의 이름이 timeSlider 일 때
+                        time = sliderName.getValue(); // time에 sliderName의 현재 값 전달
+                        valueOfTime.setText("Time : " + String.valueOf(time)); // valueOfTime의 텍스트 수정
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+    }
 
     public static void main(String[] args) {
         new SettingScreen();

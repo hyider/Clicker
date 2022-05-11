@@ -7,21 +7,20 @@ import java.awt.event.ActionListener;
 
 // 프로그램 실행 시 가장 처음 나오는 화면
 public class MainScreen extends JFrame {
+    public static Color backGroundColor = new Color(86,187,241); // 배경색 설정
+    public static Color buttonColor = new Color(77,119,255); // 버튼색 설정
+
     public static JLabel modeJLabel; // 게임 모드를 나타내는 라벨
 
-    public static int size; // 타겟의 사이즈 변수
-    public static int speed; // 타겟의 속도 변수
-    public static int frequency; // 타겟의 빈도 변수
-    public static int time; // 게임의 시간 변수
+    public static int size, speed, frequency, time, frequencySliderShow; // 게임 속성 변수
 
     public MainScreen() {
         size = 5;   // 타겟 사이즈 변수, 초기값 5
         speed = 5; // 타겟 속도 변수, 초기값 5
         frequency = 5; // 타겟 빈도 변수, 초기값 5
-        time = 10; // 게임 시간 변수, 초기값 10
+        frequencySliderShow = 5;
 
-        Color backGroundColor = new Color(86,187,241); // 배경색 설정
-        Color buttonColor = new Color(77,119,255); // 버튼색 설정
+        time = 10; // 게임 시간 변수, 초기값 10
 
         setTitle("AimSimulator"); // 프로그램 타이틀 "AimSimulator"
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // 창을 닫으면 프로그램 종료
@@ -30,124 +29,108 @@ public class MainScreen extends JFrame {
         container.setBackground(backGroundColor); // 컨탠트팬의 색 backGroundColor 설정
         container.setLayout(null); // 컨텐트팬의 배치관리자 없음
 
-        // ====제목==========================================================================
+        // ====[제목]==========================================================================
         JLabel title = new JLabel("AimSimulator"); // title 라벨 문자열과 함께 생성
-        title.setFont(new Font("Slab Serif",Font.ITALIC,80)); // 폰트 설정
-        title.setForeground(Color.WHITE); // title 라벨의 글씨 하얀색 설정
-        title.setLocation(50,50); // title 라벨의 위치
-        title.setSize(600,100); // title 라벨의 크기
-        container.add(title); // 컨텐트팬에 title 라벨 부착
+        settingItalicLabel(title,50,50,600,100,80);
+        container.add(title);
 
         // ====[버젼]==========================================================================
-        JLabel version = new JLabel("version_3.5"); // version 라벨 문자열과 함께 생성
-        version.setFont(new Font("Slab Serif",Font.ITALIC,20)); // 폰트 설정
-        version.setForeground(Color.WHITE); // version 라벨의 글씨 하얀색 설정
-        version.setLocation(50,150); // version 라벨의 위치
-        version.setSize(150,25); // version 라벨의 크기
+        JLabel version = new JLabel("version_test"); // version 라벨 문자열과 함께 생성
+        settingItalicLabel(version,50,150,150,25,20);
         container.add(version); // 컨텐트팬에 version 라벨 부착
 
-        // ==[Mode_라벨]========================================================================
+        // ====[Mode_라벨]========================================================================
         modeJLabel = new JLabel("Mode : Select"); // modeJLabel 라벨 문자열과 함께 생성
-        modeJLabel.setFont(new Font("Slab Serif",Font.BOLD,25));  // 폰트 설정
-        modeJLabel.setForeground(Color.WHITE); // modeJLabel 라벨의 글씨색 설정
-        modeJLabel.setLocation(50,275); // modeJLabel 라벨의 위치 설정
-        modeJLabel.setSize(200,50); // modeJLabel 라벨의 크기 설정
-        container.add(modeJLabel); // 컨텐트팬에 modeJLabel 라벨 부착
+        settingBoldLabel(modeJLabel,50,275,200,50,25);
+        container.add(modeJLabel);
 
-        // ==[Start_버튼]=======================================================================
-        JButton startButton = new JButton("Start"); // startButton 버튼 문자열과 함께 생성
-        startButton.setFont(new Font("Slab Serif",Font.BOLD,50)); // 폰트 설정
-        startButton.setForeground(Color.WHITE); // startButton 버튼의 글씨 하얀색 설정
-        startButton.setBackground(buttonColor); // startButton 버튼의 배경색 설정
-        startButton.setLocation(50,325); // startButton 버튼의 위치
-        startButton.setSize(200,100); // startButton 버튼의 크기
-        container.add(startButton); // 컨텐트팬에 startButton 버튼 부착
+        // ====[Start 버튼]======================================================================
+        JButton startButton = new JButton("Start");
+        settingButton(startButton, 50,325,200,100,50);
+        container.add(startButton);
+        clickEvent(startButton, "Start"); // Start 버튼 클릭 시 StartScreen 실행, 모드를 설정 안하면 경고창 발생 후 확인 시 SettingScreen 실행
 
-        // Start 버튼 클릭 시 StartScreen 실행, 모드를 설정 안하면 경고창 발생 후 확인 시 SettingScreen 실행
-        startButton.addActionListener(new ActionListener() {
+        // ====[Read 버튼]======================================================================
+        JButton readButton = new JButton("Read"); // readMeButton 버튼 문자열과 함께 생성
+        settingButton(readButton,575,150,175,75,40);
+        container.add(readButton); // 컨텐트팬에 readMeButton 버튼 부착
+        clickEvent(readButton,"Read"); // Read 버튼 클릭 시 ReadScreen 클래스 실행
+
+        // ====[Setting 버튼]=======================================================================
+        JButton settingButton = new JButton("Setting"); // settingButton 버튼 문자열과 함께 생성
+        settingButton(settingButton,575,250,175,75,40);
+        container.add(settingButton); // 컨텐트팬에 settingButton 버튼 부착
+        clickEvent(settingButton,"Setting"); // Setting 버튼을 클릭 시 SettingScreen 클래스 실행
+
+        // ====[Quit 버튼]==========================================================================
+        JButton quitButton = new JButton("Quit"); // quitButton 버튼 문자열과 함께 생성
+        settingButton(quitButton,575,350,175,75,50);
+        container.add(quitButton); // 컨텐트팬에 quitButton 버튼 부착
+        clickEvent(quitButton, "Quit"); // Quit 버튼을 클릭 시 시스템 종료
+
+        settingScreen(800,500,false,null,true);
+    }
+
+    public void settingScreen(int sizeX, int sizeY, boolean resizable, Component locationRelativeTo, boolean visible) {
+        setSize(sizeX,sizeY); // 창의 x,y 크기 인자로 받아 설정
+        setResizable(resizable); // 창의 크기 변경 여부 인자로 받아 설정
+        setLocationRelativeTo(locationRelativeTo); // 창의 상대적 위치 인자로 받아 설정
+        setVisible(visible); // 창을 띄우는 여부 인자로 받아 설정
+    }
+
+    public static void settingButton(JButton buttonName, int locationX, int locationY, int sizeX, int sizeY,int fontSize){
+        buttonName.setFont(new Font("Slab Serif", Font.BOLD, fontSize)); // 폰트 설정, 폰트 크기 인자로 받아 설정
+        buttonName.setForeground(Color.WHITE); // 글씨 색 설정
+        buttonName.setBackground(buttonColor); // 버튼 배경 색 설정
+        buttonName.setLocation(locationX, locationY); // 버튼의 위치 인자로 받아 설정
+        buttonName.setSize(sizeX, sizeY); // 버큰의 크기 인자로 받아 설정
+    }
+
+    public static void settingPlainLabel(JLabel labelName, int locationX, int locationY, int sizeX, int sizeY, int fontSize) {
+        labelName.setFont(new Font("Slab Serif",Font.PLAIN,fontSize)); // 폰트 설정 - PLAIN, 폰트 크기 인자로 받아 설정
+        labelName.setForeground(Color.WHITE); // 글씨 색 하얀색 설정
+        labelName.setLocation(locationX,locationY); // 라벨의 위치 인자로 받아 설정
+        labelName.setSize(sizeX,sizeY); // 라벨의 크기 인자로 받아 설정
+    }
+
+    public static void settingBoldLabel(JLabel labelName, int locationX, int locationY, int sizeX, int sizeY, int fontSize) {
+        labelName.setFont(new Font("Slab Serif",Font.BOLD,fontSize)); // 폰트 설정 - BOLD, 폰트 크기 인자로 받아 설정
+        labelName.setForeground(Color.WHITE); // 글씨 색 하얀색 설정
+        labelName.setLocation(locationX,locationY); // 라벨의 위치 인자로 받아 설정
+        labelName.setSize(sizeX,sizeY); // 라벨의 크기 인자로 받아 설정
+    }
+    public static void settingItalicLabel(JLabel labelName, int locationX, int locationY, int sizeX, int sizeY, int fontSize) {
+        labelName.setFont(new Font("Slab Serif",Font.ITALIC,fontSize)); // 폰트 설정 - ITALIC, 폰트 크기 인자로 받아 설정
+        labelName.setForeground(Color.WHITE); // 글씨 색 하얀색 설정
+        labelName.setLocation(locationX,locationY); // 라벨의 위치 인자로 받아 설정
+        labelName.setSize(sizeX,sizeY); // 라벨의 크기 인자로 받아 설정
+    }
+
+    // 테스트용 이벤트리스너
+    public void clickEvent(JButton buttonName, String className) {
+        buttonName.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (modeJLabel.getText() == "Mode : Select") {
-                    JOptionPane.showMessageDialog(null,"Select Mode!","ERROR", JOptionPane.ERROR_MESSAGE);
-                    new SettingScreen();
-                    // 모드 선택 안한 상태로 Start 버튼 누르면 경고창 발생.
-                } else {
-                    new StartScreen();
+                switch (className) { // className String 인자로 받아 설정
+                    case "Setting": // className이면 "Setting" 이면
+                        new SettingScreen(); break; // SettingScreen 객체 생성
+                    case "Read": // className이 Read이면
+                        new ReadScreen(); break; // ReadScreen 객체 생성
+                    case "Quit": // className이 "Quit" 이면
+                        System.exit(0); break; // 시스템 종료
+                    case "Start": // className이 "Start" 이면
+                        if (modeJLabel.getText() == "Mode : Select") { // modeJLabel의 텍스트가 "Mode : Select" 일 경우
+                            // 경고창 생성 후 SettingScreen 객체 생성
+                            JOptionPane.showMessageDialog(null,"Select Mode!","ERROR", JOptionPane.ERROR_MESSAGE);
+                            new SettingScreen();
+                        } else new StartScreen(); // StartScreen 객체 생성
+                        break;
+                        //
+                    default: System.exit(0);
                 }
             }
         });
-
-        // ==[Read 버튼]======================================================================
-        JButton readMeButton = new JButton("Read"); // readMeButton 버튼 문자열과 함께 생성
-        readMeButton.setFont(new Font("Slab Serif",Font.BOLD,40)); // 폰트 설정
-        readMeButton.setForeground(Color.WHITE); // readMeButton 버튼의 글씨 하얀색 설정
-        readMeButton.setBackground(buttonColor); // readMeButton 버튼의 배경색 설정
-        readMeButton.setLocation(575,150); // readMeButton 버튼의 위치 설정
-        readMeButton.setSize(175,75); // readMeButton 버튼의 크기 설정
-        container.add(readMeButton); // 컨텐트팬에 readMeButton 버튼 부착
-
-        // Read 버튼 클릭 시 ReadScreen 클래스 실행
-        readMeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new ReadScreen();
-            }
-        });
-
-        // ==[Setting_버튼]=======================================================================
-        JButton settingButton = new JButton("Setting"); // settingButton 버튼 문자열과 함께 생성
-        settingButton.setFont(new Font("Slab Serif",Font.BOLD,40)); // 폰트 설정
-        settingButton.setForeground(Color.WHITE); // settingButton 버튼의 글씨색 설정
-        settingButton.setBackground(buttonColor); // settingButton 버튼의 배경색 설정
-        settingButton.setLocation(575,250); // settingButton 버튼의 위치 설정
-        settingButton.setSize(175,75); // settingButton 버튼의 크기 설정
-        container.add(settingButton); // 컨텐트팬에 settingButton 버튼 부착
-
-        // Setting 버튼을 클릭 시 SettingScreen 클래스 실행
-        settingButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new SettingScreen();
-            }
-        });
-
-        // ==[Quit_버튼]==========================================================================
-        JButton quitButton = new JButton("Quit"); // quitButton 버튼 문자열과 함께 생성
-        quitButton.setFont(new Font("Slab Serif",Font.BOLD,50)); // 폰트 설정
-        quitButton.setForeground(Color.WHITE); // quitButton 버튼의 글씨색 설정
-        quitButton.setBackground(buttonColor); // quitButton 버튼의 배경색 설정
-        quitButton.setLocation(575,350); // quitButton 버튼의 위치 설정
-        quitButton.setSize(175,75); // quitButton 버튼의 크기 설정
-        container.add(quitButton); // 컨텐트팬에 quitButton 버튼 부착
-
-        // Quit 버튼을 클릭 시 시스템 종료
-        quitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
-
-        setSize(800,500); // 창의 크기 설정
-        setResizable(false); // 창의 크기 고정
-        setLocationRelativeTo(null); // 창이 가운데에 나타남
-        setVisible(true); // 화면에 창을 나타냄
     }
-
-    /**
-    // ==[Setting_버튼]=======================================================================
-    JButton settingButton = new JButton("Setting"); // settingButton 버튼 문자열과 함께 생성
-        settingButton.setFont(new Font("Slab Serif",Font.BOLD,40)); // 폰트 설정
-        settingButton.setForeground(Color.WHITE); // settingButton 버튼의 글씨색 설정
-        settingButton.setBackground(buttonColor); // settingButton 버튼의 배경색 설정
-        settingButton.setLocation(575,250); // settingButton 버튼의 위치 설정
-        settingButton.setSize(175,75); // settingButton 버튼의 크기 설정
-        container.add(settingButton); // 컨텐트팬에 settingButton 버튼 부착
-
-    public void createButton(String buttonName, int locationX, int locationY, int sizeX, int sizeY) {
-        JButton buttonName = new JButton(buttonName);
-    }
-    **/
 
     public static void main(String[] args) {
         new MainScreen(); // 메인화면 호출

@@ -21,12 +21,9 @@ public class StartScreen extends JFrame {
     public static int selectMoveX;
     public static int selectMoveY;
 
-
     public static JLabel hitCountLabel;
     public static JLabel missCOuntLabel;
     public static JLabel timeCountLabel;
-
-
 
     public StartScreen() {
         setTitle("Start");
@@ -267,11 +264,27 @@ public class StartScreen extends JFrame {
             });
 
             while (true) {
+
+                if (timeCount == 0) {
+                    ScoreScreen.percent = ((double)hitCount/(double)totalCount)*100;
+                    ScoreScreen.totalCount = totalCount;
+                    ScoreScreen.hitCount = hitCount;
+                    ScoreScreen.missCount = missCount;
+                    return;
+                }
+
                 targetX = ((int) (Math.random() * 700));
                 targetY = ((int) (Math.random() * 700));
 
-                targetButton = new JButton();
+                ImageIcon imageIcon = new ImageIcon("src/main/resources/target.png");
+                Image image = imageIcon.getImage();
+                Image image1 = image.getScaledInstance((MainScreen.size+10)*5,(MainScreen.size+10)*5,Image.SCALE_SMOOTH);
+                ImageIcon imageIcon1 = new ImageIcon(image1);
+
+                targetButton = new JButton(imageIcon1);
                 targetButton.setSize((MainScreen.size + 10) * 5, (MainScreen.size + 10) * 5);
+                targetButton.setBorderPainted(false);
+                targetButton.setContentAreaFilled(false);
                 targetButton.setLocation(targetX, targetY);
                 container.add(targetButton);
                 targetButton.addActionListener(new ActionListener() {
@@ -286,17 +299,7 @@ public class StartScreen extends JFrame {
 
                 totalCount++;
 
-                //randomMove.start();
-
                 container.repaint();
-
-                if (timeCount == 0) {
-                    ScoreScreen.percent = ((double)hitCount/(double)totalCount)*100;
-                    ScoreScreen.totalCount = totalCount;
-                    ScoreScreen.hitCount = hitCount;
-                    ScoreScreen.missCount = missCount;
-                    return;
-                }
 
                 try {
                     sleep(1000 - (11 - MainScreen.frequency) * 50);
