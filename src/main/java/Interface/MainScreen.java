@@ -29,40 +29,40 @@ public class MainScreen extends JFrame {
         container.setBackground(backGroundColor); // 컨탠트팬의 색 backGroundColor 설정
         container.setLayout(null); // 컨텐트팬의 배치관리자 없음
 
-        // ====[제목]==========================================================================
+        // ====[제목]====================================================================================================
         JLabel title = new JLabel("AimSimulator"); // title 라벨 문자열과 함께 생성
         settingItalicLabel(title,50,50,600,100,80);
         container.add(title);
 
-        // ====[버젼]==========================================================================
+        // ====[버젼]====================================================================================================
         JLabel version = new JLabel("version_test"); // version 라벨 문자열과 함께 생성
         settingItalicLabel(version,50,150,150,25,20);
         container.add(version); // 컨텐트팬에 version 라벨 부착
 
-        // ====[Mode_라벨]========================================================================
+        // ====[Mode_라벨]===============================================================================================
         modeJLabel = new JLabel("Mode : Select"); // modeJLabel 라벨 문자열과 함께 생성
         settingBoldLabel(modeJLabel,50,275,200,50,25);
         container.add(modeJLabel);
 
-        // ====[Start 버튼]======================================================================
+        // ====[Start 버튼]==============================================================================================
         JButton startButton = new JButton("Start");
         settingButton(startButton, 50,325,200,100,50);
         container.add(startButton);
         clickEvent(startButton, "Start"); // Start 버튼 클릭 시 StartScreen 실행, 모드를 설정 안하면 경고창 발생 후 확인 시 SettingScreen 실행
 
-        // ====[Read 버튼]======================================================================
+        // ====[Read 버튼]===============================================================================================
         JButton readButton = new JButton("Read"); // readMeButton 버튼 문자열과 함께 생성
         settingButton(readButton,575,150,175,75,40);
         container.add(readButton); // 컨텐트팬에 readMeButton 버튼 부착
         clickEvent(readButton,"Read"); // Read 버튼 클릭 시 ReadScreen 클래스 실행
 
-        // ====[Setting 버튼]=======================================================================
+        // ====[Setting 버튼]============================================================================================
         JButton settingButton = new JButton("Setting"); // settingButton 버튼 문자열과 함께 생성
         settingButton(settingButton,575,250,175,75,40);
         container.add(settingButton); // 컨텐트팬에 settingButton 버튼 부착
         clickEvent(settingButton,"Setting"); // Setting 버튼을 클릭 시 SettingScreen 클래스 실행
 
-        // ====[Quit 버튼]==========================================================================
+        // ====[Quit 버튼]===============================================================================================
         JButton quitButton = new JButton("Quit"); // quitButton 버튼 문자열과 함께 생성
         settingButton(quitButton,575,350,175,75,50);
         container.add(quitButton); // 컨텐트팬에 quitButton 버튼 부착

@@ -41,7 +41,7 @@ public class SettingScreen extends JFrame {
         container.setBackground(backGroundColor); // 컨탠트팬의 색 backGroundColor 설정
         container.setLayout(null); // 배치관리자는 없음
 
-        // ====[Title_Label]==========================================================================
+        // ====[Title_Label]============================================================================================
         JLabel title = new JLabel("Setting"); // title 라벨 문자열과 함께 생성
         title.setFont(new Font("Slab Serif",Font.ITALIC,60)); // 폰트 설정
         title.setForeground(Color.WHITE); // title 라벨의 글씨 하얀색 설정
@@ -49,36 +49,36 @@ public class SettingScreen extends JFrame {
         title.setSize(200,75); // title 라벨의 크기
         container.add(title); // 컨텐트팬에 title 라벨 부착
 
-        // ====[Mode_Label]==========================================================================
+        // ====[Mode_Label]=============================================================================================
         customLabel = new JLabel(modeJLabel.getText()); // customLabel 라벨 문자열과 함께 생성
         settingPlainLabel(customLabel,400,15,300,75,40);
         container.add(customLabel); // 컨텐트팬에 customLabel 라벨 부착
 
-        // ====[Easy_Button]=======================================================================
+        // ====[Easy_Button]============================================================================================
         JButton easyButton = new JButton("Easy"); // easyButton 버튼 문자열과 함께 생성
         settingButton(easyButton,35,115,150,50,30);
         container.add(easyButton); // 컨텐트팬에 easyButton 버튼 부착
         clickEvent(easyButton,"Mode : Easy", 10, 1, 1, false);
 
-        // ====[Normal_Button]=======================================================================
+        // ====[Normal_Button]==========================================================================================
         JButton normalButton = new JButton("Normal"); // normalButton 버튼 문자열과 함께 생성
         settingButton(normalButton,35,175,150,50,30);
         container.add(normalButton); // 컨텐트팬에 normalButton 버튼 부착
         clickEvent(normalButton,"Mode : Normal",5,5,5,false);
 
-        // ====[Hard_Button]=======================================================================
+        // ====[Hard_Button]============================================================================================
         JButton hardButton = new JButton("Hard"); // hardButton 버튼 문자열과 함께 생성
         settingButton(hardButton,35,235,150,50,30);
         container.add(hardButton); // 컨텐트팬에 hardButton 버튼 부착
         clickEvent(hardButton,"Mode : Hard", 1, 10, 10, false);
 
-        // ====[Custom_Button]=======================================================================
+        // ====[Custom_Button]==========================================================================================
         JButton customButton = new JButton("Custom"); // customButton 버튼 문자열과 함께 생성
         settingButton(customButton,35,295,150,50,30);
         container.add(customButton); // 컨텐트팬에 customButton 버튼 부착
         clickEvent(customButton,"Mode : Custom", size, speed, frequency, true);
 
-        // ==[Save_Button]=======================================================================
+        // ==[Save_Button]==============================================================================================
         saveButton = new JButton("Save"); // saveButton 버튼 문자열과 함께 생성
         settingButton(saveButton,35,355,150,50,30);
         container.add(saveButton); // 컨텐트팬에 saveButton 버튼 부착
@@ -98,40 +98,40 @@ public class SettingScreen extends JFrame {
             }
         });
 
-        // ====[Size_Slider]=================================================================================
+        // ====[Size_Slider]============================================================================================
         sizeSlider = new JSlider(1,10,size);
         settingSlider(sizeSlider,265,165,485,50,1);
         container.add(sizeSlider);
         sizeSlider.setName("sizeSlider");
         changeEventSlider(sizeSlider);
-        // ====[Size_Label]===================================================================================
+        // ====[Size_Label]=============================================================================================
         valueOfSize = new JLabel("Size : " + String.valueOf(size));
         settingPlainLabel(valueOfSize,265,95,200,75,30);
         container.add(valueOfSize); // 컨텐트팬에 valueOfSize 라벨 부착
 
-        // ====[Speed_Slider]=================================================================================
+        // ====[Speed_Slider]===========================================================================================
         speedSlider = new JSlider(1,10,speed);
         settingSlider(speedSlider,265,215,485,50,1);
         container.add(speedSlider);
         speedSlider.setName("speedSlider");
         changeEventSlider(speedSlider);
-        // ====[Speed_Label]===================================================================================
+        // ====[Speed_Label]============================================================================================
         valueOfSpeed = new JLabel("Speed : " + String.valueOf(speed));
         settingPlainLabel(valueOfSpeed,395,95,200,75,30);
         container.add(valueOfSpeed); // 컨텐트팬에 valueOfSpeed 라벨 부착
 
-        // ====[Frequency_Slider]===================================================================================
+        // ====[Frequency_Slider]=======================================================================================
         frequencySlider = new JSlider(1,10,frequency);
         settingSlider(frequencySlider,265,265,485,50,1);
         container.add(frequencySlider);
         frequencySlider.setName("frequencySlider");
         changeEventSlider(frequencySlider);
-        // ====[Frequency_Label]===================================================================================
+        // ====[Frequency_Label]========================================================================================
         valueOfFrequency = new JLabel("Frequency : " + String.valueOf(frequency));
         settingPlainLabel(valueOfFrequency,545,95,200,75,30);
         container.add(valueOfFrequency); // 컨텐트팬에 valueOfFrequency 라벨 부착
 
-        // ====[Time_Slider]===================================================================================
+        // ====[Time_Slider]============================================================================================
         timeSlider = new JSlider(10,60,time);
         settingSlider(timeSlider,265,315,485,50, 5);
         timeSlider.setName("timeSlider");
@@ -139,7 +139,7 @@ public class SettingScreen extends JFrame {
         timeSlider.setMinorTickSpacing(1);
         container.add(timeSlider);
         changeEventSlider(timeSlider);
-        // ====[Time_Label]===================================================================================
+        // ====[Time_Label]=============================================================================================
         valueOfTime = new JLabel("Time : " + String.valueOf(frequency));
         settingPlainLabel(valueOfTime,545,95,200,75,30); // 타임라벨 위치 재선정
         container.add(valueOfTime); // 컨텐트팬에 valueOfTime 라벨 부착
