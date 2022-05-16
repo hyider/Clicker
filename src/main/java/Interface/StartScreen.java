@@ -218,8 +218,6 @@ public class StartScreen extends JFrame {
             this.container = container;
         }
 
-        Color backGroundColor = new Color(86, 187, 241); // 배경색 설정
-
         public static JLabel readyLabel;
 
         public void run() {
