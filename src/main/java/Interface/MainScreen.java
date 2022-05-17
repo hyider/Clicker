@@ -130,7 +130,7 @@ public class MainScreen extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 switch (className) { // className String 인자로 받아 설정
                     case "Setting": // className이면 "Setting" 이면
-                        new SettingScreenToButton(); break; // SettingScreen 객체 생성
+                        new SettingScreen(); break; // SettingScreen 객체 생성
                     case "Read": // className이 Read이면
                         new ReadScreen(); break; // ReadScreen 객체 생성
                     case "Quit": // className이 "Quit" 이면
@@ -139,7 +139,7 @@ public class MainScreen extends JFrame {
                         if (modeJLabel.getText() == "Mode : Select") { // modeJLabel의 텍스트가 "Mode : Select" 일 경우
                             // 경고창 생성 후 SettingScreen 객체 생성
                             JOptionPane.showMessageDialog(null,"Select Mode!","ERROR", JOptionPane.ERROR_MESSAGE);
-                            new SettingScreenToButton();
+                            new SettingScreen();
                         } else new StartScreen(); // StartScreen 객체 생성
                         break;
                         //
