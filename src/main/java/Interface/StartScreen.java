@@ -107,6 +107,25 @@ public class StartScreen extends JFrame {
         }
     }
 
+    class MoveTargetTest extends Thread {
+        private Container container;
+        public MoveTargetTest(Container container) {
+            this.container = container;
+        }
+        @Override
+        public void run() {
+            while(true) {
+                targetButton.setLocation(targetX + 1, targetY + 1);
+                container.repaint();
+                try {
+                    sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     class RandomMove extends Thread {
         private Container container;
         RandomMove(Container container) {
@@ -222,7 +241,6 @@ public class StartScreen extends JFrame {
 
         public void run() {
             String readyCount = null;
-
             // 게임 시작 카운트다운 스레드로 만들 수 있으면 만들기
             for (int i = 3; i > 0; i--) {
                 switch (i) {
@@ -242,6 +260,7 @@ public class StartScreen extends JFrame {
                 readyLabel.setLocation(300, 400);
                 readyLabel.setForeground(Color.WHITE);
                 container.add(readyLabel);
+                container.repaint();
                 try {
                     sleep(1000);
                 } catch (InterruptedException e) {
@@ -250,6 +269,8 @@ public class StartScreen extends JFrame {
                 container.remove(readyLabel);
                 container.repaint();
             }
+
+            MoveTargetTest moveTargetTest = new MoveTargetTest(container);
 
             container.addMouseListener(new MouseAdapter() {
                 @Override
@@ -262,7 +283,6 @@ public class StartScreen extends JFrame {
             });
 
             while (true) {
-
                 if (timeCount == 0) {
                     ScoreScreen.percent = ((double)hitCount/(double)totalCount)*100;
                     ScoreScreen.totalCount = totalCount;
@@ -285,6 +305,9 @@ public class StartScreen extends JFrame {
                 targetButton.setContentAreaFilled(false);
                 targetButton.setLocation(targetX, targetY);
                 container.add(targetButton);
+
+                moveTargetTest.start();
+
                 targetButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {

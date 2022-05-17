@@ -14,11 +14,16 @@ public class MainScreen extends JFrame {
 
     public static int size, speed, frequency, time, frequencySliderShow; // 게임 속성 변수
 
+    public static int listIndex = 2018041089;
+
     public MainScreen() {
-        size = 5;   // 타겟 사이즈 변수, 초기값 5
-        speed = 5; // 타겟 속도 변수, 초기값 5
-        frequency = 5; // 타겟 빈도 변수, 초기값 5
-        frequencySliderShow = 5;
+
+
+
+        size = 1;   // 타겟 사이즈 변수, 초기값 5
+        speed = 1; // 타겟 속도 변수, 초기값 5
+        frequency = 1; // 타겟 빈도 변수, 초기값 5
+        frequencySliderShow = 1;
 
         time = 10; // 게임 시간 변수, 초기값 10
 
@@ -68,6 +73,18 @@ public class MainScreen extends JFrame {
         container.add(quitButton); // 컨텐트팬에 quitButton 버튼 부착
         clickEvent(quitButton, "Quit"); // Quit 버튼을 클릭 시 시스템 종료
 
+        switch (listIndex) {
+            case 0:
+                modeJLabel.setText("Mode : Custom"); break;
+            case 1:
+                modeJLabel.setText("Mode : Easy"); break;
+            case 2:
+                modeJLabel.setText("Mode : Normal"); break;
+            case 3:
+                modeJLabel.setText("Mode : Hard"); break;
+            default: break;
+        }
+
         settingScreen(800,500,false,null,true);
     }
 
@@ -113,7 +130,7 @@ public class MainScreen extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 switch (className) { // className String 인자로 받아 설정
                     case "Setting": // className이면 "Setting" 이면
-                        new SettingScreen(); break; // SettingScreen 객체 생성
+                        new SettingScreenToButton(); break; // SettingScreen 객체 생성
                     case "Read": // className이 Read이면
                         new ReadScreen(); break; // ReadScreen 객체 생성
                     case "Quit": // className이 "Quit" 이면
@@ -122,7 +139,7 @@ public class MainScreen extends JFrame {
                         if (modeJLabel.getText() == "Mode : Select") { // modeJLabel의 텍스트가 "Mode : Select" 일 경우
                             // 경고창 생성 후 SettingScreen 객체 생성
                             JOptionPane.showMessageDialog(null,"Select Mode!","ERROR", JOptionPane.ERROR_MESSAGE);
-                            new SettingScreen();
+                            new SettingScreenToButton();
                         } else new StartScreen(); // StartScreen 객체 생성
                         break;
                         //

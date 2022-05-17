@@ -8,6 +8,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 import static Interface.MainScreen.*;
 
@@ -17,6 +20,9 @@ public class SettingScreenToButton extends JFrame {
     public static int speed;
     public static int frequency;
     public static int time;
+
+    public static String [] modeList = {"Custom","Easy","Normal","Hard"};
+    public static int listIndex = 0;
 
     public static JLabel valueOfSize;
     public static JLabel valueOfSpeed;
@@ -33,15 +39,11 @@ public class SettingScreenToButton extends JFrame {
     public static JSlider timeSlider;
 
     SettingScreenToButton() {
-        /*
         size = MainScreen.size;
         speed = MainScreen.speed;
         frequency = frequencySliderShow;
         time = MainScreen.time;
-        */
-        size = 5;
-        frequency = 5;
-        time = 10;
+
         setTitle("Setting");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -74,58 +76,225 @@ public class SettingScreenToButton extends JFrame {
             public void mouseExited(MouseEvent e) {}
         });
 
-        JLabel modeLabel = new JLabel("Custom");
-        settingPlainLabel(modeLabel,395, 40,200,50,50);
+        /*
+        LinkedList<String> modeList = new LinkedList<String>();
+        modeList.add("Easy"); modeList.add("Normal");
+        modeList.add("Hard"); modeList.add("Custom");
+        ListIterator<String> setMode = modeList.listIterator();
+        */
+
+        JLabel modeLabel = new JLabel(modeList[listIndex]);
+        settingPlainLabel(modeLabel,395, 40,200,60,50);
         modeLabel.setHorizontalAlignment(JLabel.CENTER);
         container.add(modeLabel);
+
+
 
         JButton nextButton = new JButton("▶");
         settingButton(nextButton,645,40,50,50,15);
         container.add(nextButton);
+        nextButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                listIndex++;
+                if (listIndex>3)
+                    listIndex = 0;
+                modeLabel.setText(modeList[listIndex]);
+                switch (listIndex) {
+                    case 1:
+                        sizeSlider.setValue(10); frequencySlider.setValue(1);
+                        sizeSlider.setEnabled(false); frequencySlider.setEnabled(false);
+                        break;
+                    case 2:
+                        sizeSlider.setValue(5); frequencySlider.setValue(5);
+                        sizeSlider.setEnabled(false); frequencySlider.setEnabled(false);
+                        break;
+                    case 3:
+                        sizeSlider.setValue(1); frequencySlider.setValue(10);
+                        sizeSlider.setEnabled(false); frequencySlider.setEnabled(false);
+                        break;
+                    case 0:
+                        sizeSlider.setEnabled(true); frequencySlider.setEnabled(true);
+                        break;
+                    default: break;
+                }
+            }
+        });
+        /*
+        nextButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(!setMode.hasNext()){
+                    for(int i=0;i<3;i++)
+                        setMode.previous();
+                    modeLabel.setText(setMode.previous());
+                }
+                modeLabel.setText(setMode.next());
+                switch (modeLabel.getText()) {
+                    case "Easy":
+                        sizeSlider.setValue(10); frequencySlider.setValue(1);
+                        sizeSlider.setEnabled(false); frequencySlider.setEnabled(false);
+                        break;
+                    case "Normal":
+                        sizeSlider.setValue(5); frequencySlider.setValue(5);
+                        sizeSlider.setEnabled(false); frequencySlider.setEnabled(false);
+                        break;
+                    case "Hard":
+                        sizeSlider.setValue(1); frequencySlider.setValue(10);
+                        sizeSlider.setEnabled(false); frequencySlider.setEnabled(false);
+                        break;
+                    case "Custom":
+                        sizeSlider.setEnabled(true); frequencySlider.setEnabled(true);
+                        break;
+                    default: break;
+                }
+                saveButton.setEnabled(true);
+            }
 
+        });
+        */
         JButton preButton = new JButton("◀");
         settingButton(preButton,295,40,50,50,15);
         container.add(preButton);
+        preButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                listIndex--;
+                if (listIndex<0)
+                    listIndex = 3;
+                modeLabel.setText(modeList[listIndex]);
+                switch (listIndex) {
+                    case 1:
+                        sizeSlider.setValue(10); frequencySlider.setValue(1);
+                        sizeSlider.setEnabled(false); frequencySlider.setEnabled(false);
+                        break;
+                    case 2:
+                        sizeSlider.setValue(5); frequencySlider.setValue(5);
+                        sizeSlider.setEnabled(false); frequencySlider.setEnabled(false);
+                        break;
+                    case 3:
+                        sizeSlider.setValue(1); frequencySlider.setValue(10);
+                        sizeSlider.setEnabled(false); frequencySlider.setEnabled(false);
+                        break;
+                    case 0:
+                        sizeSlider.setEnabled(true); frequencySlider.setEnabled(true);
+                        break;
+                    default: break;
+                }
+            }
+        });
+        /*
+        preButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(!setMode.hasPrevious()){
+                    for(int i=0;i<3;i++)
+                        setMode.next();
+                    modeLabel.setText(setMode.next());
+                }
+                modeLabel.setText(setMode.previous());
+                switch (modeLabel.getText()) {
+                    case "Easy":
+                        sizeSlider.setValue(10); frequencySlider.setValue(1);
+                        sizeSlider.setEnabled(false); frequencySlider.setEnabled(false);
+                        break;
+                    case "Normal":
+                        sizeSlider.setValue(5); frequencySlider.setValue(5);
+                        sizeSlider.setEnabled(false); frequencySlider.setEnabled(false);
+                        break;
+                    case "Hard":
+                        sizeSlider.setValue(1); frequencySlider.setValue(10);
+                        sizeSlider.setEnabled(false); frequencySlider.setEnabled(false);
+                        break;
+                    case "Custom":
+                        sizeSlider.setEnabled(true); frequencySlider.setEnabled(true);
+                        break;
+                    default: break;
+                }
+                saveButton.setEnabled(true);
+            }
+        });
+        */
 
 
         // ====[Size_Slider]============================================================================================
         sizeSlider = new JSlider(1,10,size);
         settingSlider(sizeSlider,220,170,550,20,1);
         container.add(sizeSlider);
-        sizeSlider.setName("sizeSlider");
         changeEventSlider(sizeSlider);
         // ====[Size_Label]=============================================================================================
-        valueOfSize = new JLabel("Size : " + String.valueOf(size));
-        settingPlainLabel(valueOfSize,30,145,150,50,40);
+        JLabel sizeLabel = new JLabel("Size");
+        settingPlainLabel(sizeLabel,10,145,150,50,40);
+        container.add(sizeLabel);
+        valueOfSize = new JLabel(String.valueOf(size));
+        settingPlainLabel(valueOfSize,150,150,50,50,40);
         container.add(valueOfSize);
 
         // ====[Frequency_Slider]=======================================================================================
         frequencySlider = new JSlider(1,10,frequency);
-        settingSlider(frequencySlider,265,265,485,50,1);
+        settingSlider(frequencySlider,220,250,550,20,1);
         container.add(frequencySlider);
-        frequencySlider.setName("frequencySlider");
         changeEventSlider(frequencySlider);
         // ====[Frequency_Label]========================================================================================
-        valueOfFrequency = new JLabel("Speed");
-        settingPlainLabel(valueOfFrequency,30,225,150,50,40);
+        JLabel freqLabel = new JLabel("Freq");
+        settingPlainLabel(freqLabel,10,225,150,50,40);
+        container.add(freqLabel);
+        valueOfFrequency = new JLabel(String.valueOf(frequency));
+        settingPlainLabel(valueOfFrequency,150,230,50,50,40);
         container.add(valueOfFrequency);
 
         // ====[Time_Slider]============================================================================================
         timeSlider = new JSlider(10,60,time);
-        settingSlider(timeSlider,265,315,485,50, 5);
-        timeSlider.setName("timeSlider");
-        timeSlider.setMajorTickSpacing(5);
-        timeSlider.setMinorTickSpacing(1);
+        settingSlider(timeSlider,220,330,550,20, 5);
         container.add(timeSlider);
         changeEventSlider(timeSlider);
         // ====[Time_Label]=============================================================================================
-        valueOfTime = new JLabel("Time");
-        settingPlainLabel(valueOfTime,30,305,150,50,40); // 타임라벨 위치 재선정
+        JLabel timeLabel = new JLabel("Time");
+        settingPlainLabel(timeLabel,10,305,150,50,40); // 타임라벨 위치 재선정
+        container.add(timeLabel);
+        valueOfTime = new JLabel(String.valueOf(time));
+        settingPlainLabel(valueOfTime,150,310,50,50,40); // 타임라벨 위치 재선정
         container.add(valueOfTime);
+
+        saveButton = new JButton("Save"); // saveButton 버튼 문자열과 함께 생성
+        settingButton(saveButton,600,380,150,50,30);
+        container.add(saveButton); // 컨텐트팬에 saveButton 버튼 부착
+
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MainScreen.size = size;
+                MainScreen.speed = speed;
+                frequencySliderShow = frequency;
+                MainScreen.frequency = 10 - (frequency-1);
+                MainScreen.time = time;
+                modeJLabel.setText("Mode : " + modeLabel.getText());
+                dispose();
+            }
+        });
+
+        switch (listIndex) {
+            case 1:
+                sizeSlider.setValue(10); frequencySlider.setValue(1);
+                sizeSlider.setEnabled(false); frequencySlider.setEnabled(false);
+                break;
+            case 2:
+                sizeSlider.setValue(5); frequencySlider.setValue(5);
+                sizeSlider.setEnabled(false); frequencySlider.setEnabled(false);
+                break;
+            case 3:
+                sizeSlider.setValue(1); frequencySlider.setValue(10);
+                sizeSlider.setEnabled(false); frequencySlider.setEnabled(false);
+                break;
+            case 0:
+                sizeSlider.setValue(size); frequencySlider.setValue(frequency);
+                sizeSlider.setEnabled(true); frequencySlider.setEnabled(true);
+                break;
+            default: break;
+        }
 
 
         settingScreen(800,500,false,null,true);
-
     }
 
     public void settingScreen(int sizeX, int sizeY, boolean resizable, Component locationRelativeTo, boolean visible) {
@@ -133,26 +302,6 @@ public class SettingScreenToButton extends JFrame {
         setResizable(resizable); // 창의 크기 변경 여부 인자로 받아 설정
         setLocationRelativeTo(locationRelativeTo); // 창의 상대적 위치 인자로 받아 설정
         setVisible(visible); // 창을 띄우는 여부 인자로 받아 설정
-    }
-
-    public void clickEvent (JButton buttonName, String modeSet, int sizeValue, int speedValue, int frequencyValue, boolean enabled) {
-        buttonName.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                modeJLabel.setText(modeSet); // modeJLabel의 텍스트 인자로 받아 설정
-                customLabel.setText(modeSet); // customLabel의 텍스트 인자로 받아 설정
-
-                sizeSlider.setValue(sizeValue); // sizeSlider의 값 인자로 받아 설정
-                speedSlider.setValue(speedValue); // speedSlider의 값 인자로 받아 설정
-                frequencySlider.setValue(frequencyValue); // frequency의 값 인자로 받아 설정
-
-                sizeSlider.setEnabled(enabled); // sizeSlider 가동 여부 인자로 받아 설정
-                speedSlider.setEnabled(enabled); // speedSlider 가동 여부 인자로 받아 설정
-                frequencySlider.setEnabled(enabled); // frequencySlider 가동 여부 인자로 받아 설정
-
-                saveButton.setEnabled(true); // saveButton 가동 여부 인자로 받아 설정
-            }
-        });
     }
 
     public void settingSlider (JSlider sliderName, int locationX, int locationY, int sizeX, int sizeY, int tickSpacing) {
@@ -163,6 +312,15 @@ public class SettingScreenToButton extends JFrame {
         sliderName.setMajorTickSpacing(tickSpacing); // JSlider의 눈금 간격 인자로 받아 설정
         sliderName.setLocation(locationX,locationY); // JSlider의 위치 인자로 받아 설정
         sliderName.setSize(sizeX,sizeY); // JSlider의 크기 인자로 받아 설정
+        if (locationY == 170 );
+        switch (locationY) {
+            case 170:
+                sliderName.setName("sizeSlider"); break;
+            case 250:
+                sliderName.setName("frequencySlider"); break;
+            case 330:
+                sliderName.setName("timeSlider"); break;
+        }
     }
 
     public void changeEventSlider (JSlider sliderName) {
@@ -172,19 +330,19 @@ public class SettingScreenToButton extends JFrame {
                 switch (sliderName.getName()) { //
                     case "sizeSlider": // sliderName의 이름이 sizeSlider 일 때
                         size = sliderName.getValue(); // size에 sliderName의 현재 값 전달
-                        valueOfSize.setText("Size : " + String.valueOf(size)); // valueOfSize의 텍스트 수정
+                        valueOfSize.setText(String.valueOf(size)); // valueOfSize의 텍스트 수정
                         break;
                     case "speedSlider": // sliderName의 이름이 speedSlider 일 때
                         speed = sliderName.getValue(); // speed에 sliderName의 현재 값 전달
-                        valueOfSpeed.setText("Speed : " + String.valueOf(speed)); // valueOfSpeed의 텍스트 수정
+                        valueOfSpeed.setText(String.valueOf(speed)); // valueOfSpeed의 텍스트 수정
                         break;
                     case "frequencySlider": // sliderName의 이름이 frequencySlider 일 때
                         frequency = sliderName.getValue();  // frequency에 sliderName의 현재 값 전달
-                        valueOfFrequency.setText("Frequency : " + String.valueOf(frequency)); // valueOfFrequency의 텍스트 수정
+                        valueOfFrequency.setText(String.valueOf(frequency)); // valueOfFrequency의 텍스트 수정
                         break;
                     case "timeSlider": // sliderName의 이름이 timeSlider 일 때
                         time = sliderName.getValue(); // time에 sliderName의 현재 값 전달
-                        valueOfTime.setText("Time : " + String.valueOf(time)); // valueOfTime의 텍스트 수정
+                        valueOfTime.setText(String.valueOf(time)); // valueOfTime의 텍스트 수정
                         break;
                     default:
                         break;
