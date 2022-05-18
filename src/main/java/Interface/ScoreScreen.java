@@ -68,6 +68,7 @@ public class ScoreScreen extends JFrame {
         MainScreen.settingBoldLabel(gradeLabel,400,65,300,160,200);
         container.add(gradeLabel);
 
+        // 등급을 정하기
         switch ((int) (percent/5)) {
             case 20: gradeLabel.setText("S+"); gradeLabel.setForeground(Color.YELLOW); break;
             case 19: gradeLabel.setText("S"); gradeLabel.setForeground(Color.YELLOW); break;
