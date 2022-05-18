@@ -190,6 +190,16 @@ public class SettingScreen extends JFrame {
         settingPlainLabel(valueOfTime,150,310,50,50,40); // 타임라벨 위치 재선정
         container.add(valueOfTime);
 
+        JButton selectModeButton = new JButton("Mode");
+        settingButton(selectModeButton,400, 380,150,50,30);
+        container.add(selectModeButton);
+        selectModeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new SettingModeScreen();
+            }
+        });
+
         saveButton = new JButton("Save"); // saveButton 버튼 문자열과 함께 생성
         settingButton(saveButton,600,380,150,50,30);
         container.add(saveButton); // 컨텐트팬에 saveButton 버튼 부착
@@ -226,7 +236,6 @@ public class SettingScreen extends JFrame {
                 break;
             default: break;
         }
-
 
         settingScreen(800,500,false,null,true);
     }

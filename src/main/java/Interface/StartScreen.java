@@ -216,12 +216,21 @@ public class StartScreen extends JFrame {
 
                 targetX = ((int) (Math.random() * 700));
                 targetY = ((int) (Math.random() * 615)+50);
+
                 ImageIcon imageIcon = new ImageIcon("src/main/resources/target.png");
+                ImageIcon imageIcon2 = new ImageIcon("src/main/resources/target1.png");
+
                 Image image = imageIcon.getImage();
+                Image image2 = imageIcon2.getImage();
+
                 Image image1 = image.getScaledInstance((MainScreen.size+10)*5,(MainScreen.size+10)*5,Image.SCALE_SMOOTH);
+                Image image3 = image2.getScaledInstance((MainScreen.size+10)*5,(MainScreen.size+10)*5,Image.SCALE_SMOOTH);
+
                 ImageIcon imageIcon1 = new ImageIcon(image1);
+                ImageIcon imageIcon3 = new ImageIcon(image3);
 
                 targetButton = new JButton(imageIcon1);
+                targetButton.setRolloverIcon(imageIcon3);
                 targetButton.setSize((MainScreen.size + 10) * 5, (MainScreen.size + 10) * 5);
                 targetButton.setBorderPainted(false);
                 targetButton.setContentAreaFilled(false);
