@@ -12,7 +12,6 @@ import static Interface.MainScreen.*;
 public class SettingScreen extends JFrame {
 
     public static int size;
-    public static int speed;
     public static int frequency;
     public static int time;
 
@@ -20,20 +19,17 @@ public class SettingScreen extends JFrame {
     public static int listIndex = 0;
 
     public static JLabel valueOfSize;
-    public static JLabel valueOfSpeed;
     public static JLabel valueOfFrequency;
     public static JLabel valueOfTime;
 
     public static JButton saveButton;
 
     public static JSlider sizeSlider;
-    public static JSlider speedSlider;
     public static JSlider frequencySlider;
     public static JSlider timeSlider;
 
     SettingScreen() {
         size = MainScreen.size;
-        speed = MainScreen.speed;
         frequency = frequencySliderShow;
         time = MainScreen.time;
 
@@ -87,39 +83,6 @@ public class SettingScreen extends JFrame {
                 }
             }
         });
-        /*
-        nextButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(!setMode.hasNext()){
-                    for(int i=0;i<3;i++)
-                        setMode.previous();
-                    modeLabel.setText(setMode.previous());
-                }
-                modeLabel.setText(setMode.next());
-                switch (modeLabel.getText()) {
-                    case "Easy":
-                        sizeSlider.setValue(10); frequencySlider.setValue(1);
-                        sizeSlider.setEnabled(false); frequencySlider.setEnabled(false);
-                        break;
-                    case "Normal":
-                        sizeSlider.setValue(5); frequencySlider.setValue(5);
-                        sizeSlider.setEnabled(false); frequencySlider.setEnabled(false);
-                        break;
-                    case "Hard":
-                        sizeSlider.setValue(1); frequencySlider.setValue(10);
-                        sizeSlider.setEnabled(false); frequencySlider.setEnabled(false);
-                        break;
-                    case "Custom":
-                        sizeSlider.setEnabled(true); frequencySlider.setEnabled(true);
-                        break;
-                    default: break;
-                }
-                saveButton.setEnabled(true);
-            }
-
-        });
-        */
         JButton preButton = new JButton("◀");
         settingButton(preButton,295,40,50,50,15);
         container.add(preButton);
@@ -208,7 +171,6 @@ public class SettingScreen extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MainScreen.size = size;
-                MainScreen.speed = speed;
                 frequencySliderShow = frequency;
                 MainScreen.frequency = 10 - (frequency-1);
                 MainScreen.time = time;
@@ -274,10 +236,6 @@ public class SettingScreen extends JFrame {
                     case "sizeSlider": // sliderName의 이름이 sizeSlider 일 때
                         size = sliderName.getValue(); // size에 sliderName의 현재 값 전달
                         valueOfSize.setText(String.valueOf(size)); // valueOfSize의 텍스트 수정
-                        break;
-                    case "speedSlider": // sliderName의 이름이 speedSlider 일 때
-                        speed = sliderName.getValue(); // speed에 sliderName의 현재 값 전달
-                        valueOfSpeed.setText(String.valueOf(speed)); // valueOfSpeed의 텍스트 수정
                         break;
                     case "frequencySlider": // sliderName의 이름이 frequencySlider 일 때
                         frequency = sliderName.getValue();  // frequency에 sliderName의 현재 값 전달
