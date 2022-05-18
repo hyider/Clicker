@@ -171,8 +171,9 @@ public class SettingScreen extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MainScreen.size = size;
-                frequencySliderShow = frequency;
-                MainScreen.frequency = 10 - (frequency-1);
+                frequencySliderShow = frequency; // Freq의 값을 보여지는 부분
+                MainScreen.frequency = 10 - (frequency-1); // 실제로 전달되는 Freq의 값
+                // Freq가 높아질수록 Target 쓰레드 sleep()의 인자로 전달되는 값이 작아져야 하기 때문
                 MainScreen.time = time;
                 modeJLabel.setText("Mode : " + modeLabel.getText());
                 dispose();
