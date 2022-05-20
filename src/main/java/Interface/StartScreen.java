@@ -4,11 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+import static Interface.ContentSetting.*;
+
 public class StartScreen extends JFrame {
     public static int hitCount = 0;
     public static int missCount = 0;
     public static int totalCount = 0;
-    public static int timeCount = MainScreen.time;
+    public static int timeCount = ContentSetting.time;
 
     public static int targetX;
     public static int targetY;
@@ -25,21 +27,22 @@ public class StartScreen extends JFrame {
         Container container = getContentPane();
         container.setLayout(null);
 
-        container.setBackground(MainScreen.backGroundColor);
+        container.setBackground(backGroundColor);
 
         // 타겟 클릭 횟수 라벨
         hitCountLabel = new JLabel("Score : " + hitCount);
-        MainScreen.settingBoldLabel(hitCountLabel,5,0,200,50,40);
+        settingBoldLabel(hitCountLabel,5,0,200,50,40);
         container.add(hitCountLabel);
 
         // 타겟 외 클릭 횟수 라벨
         missCountLabel = new JLabel("Miss : " + missCount);
-        MainScreen.settingBoldLabel(missCountLabel,600,0,200,50,40);
+        settingBoldLabel(missCountLabel,600,0,200,50,40);
         container.add(missCountLabel);
 
         // 시간 라벨
+        timeCount = ContentSetting.time;
         timeCountLabel = new JLabel("Time : " + timeCount);
-        MainScreen.settingBoldLabel(timeCountLabel,215,0,200,50,40);
+        settingBoldLabel(timeCountLabel,215,0,200,50,40);
         container.add(timeCountLabel);
 
         // 화면 구성
@@ -79,7 +82,7 @@ public class StartScreen extends JFrame {
                 if (timeCount == 0) { // 타임카운트가 0이 되면
                     dispose(); // 창 닫힘
                     new ScoreScreen(); // ScoreScreen 실행
-                    timeCount = MainScreen.time; // 타임 카운트에 처음 설정된 타임 값 전달
+                    timeCount = ContentSetting.time; // 타임 카운트에 처음 설정된 타임 값 전달
                     hitCount = 0; // 타겟 클릭 횟수 0으로 초기화
                     missCount = 0; // 타겟 외 클릭 횟수 0으로 초기화
                     totalCount = 0; // 총 출현 타겟 갯수 0으로 초기화
@@ -151,7 +154,7 @@ public class StartScreen extends JFrame {
                         } break;
                 }
                 try {
-                    sleep(10); // 타겟이 움직이는 속도 결정 !변수로 줄 것
+                    sleep(11 - ContentSetting.speed); // 타겟이 움직이는 속도 결정 !변수로 줄 것
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -227,12 +230,16 @@ public class StartScreen extends JFrame {
                 targetY = ((int) (Math.random() * 615)+50);
 
                 // 이미지 등록
+                //ImageIcon targetImage = new ImageIcon("src/main/resources/target.png");
+                //ImageIcon targetImageRollover = new ImageIcon("src/main/resources/target1.png");
+
+                // 이미지 등록
                 ImageIcon targetImage = new ImageIcon("src/main/resources/target.png");
                 ImageIcon targetImageRollover = new ImageIcon("src/main/resources/target1.png");
 
                 // 이미지를 버튼 크기에 맞춤
-                Image targetScale = (targetImage.getImage()).getScaledInstance((MainScreen.size+10)*5,(MainScreen.size+10)*5,Image.SCALE_SMOOTH);
-                Image targetRolloverScale = (targetImageRollover.getImage()).getScaledInstance((MainScreen.size+10)*5,(MainScreen.size+10)*5,Image.SCALE_SMOOTH);
+                Image targetScale = (targetImage.getImage()).getScaledInstance((ContentSetting.size+10)*5,(ContentSetting.size+10)*5,Image.SCALE_SMOOTH);
+                Image targetRolloverScale = (targetImageRollover.getImage()).getScaledInstance((ContentSetting.size+10)*5,(ContentSetting.size+10)*5,Image.SCALE_SMOOTH);
 
                 // 버튼 크기에 맞춘 이미지아이콘 생성
                 ImageIcon target = new ImageIcon(targetScale);
@@ -241,7 +248,7 @@ public class StartScreen extends JFrame {
                 // 타겟 속성 설정 후 생성
                 targetButton = new JButton(target);
                 targetButton.setRolloverIcon(targetRollover);
-                targetButton.setSize((MainScreen.size + 10) * 5, (MainScreen.size + 10) * 5);
+                targetButton.setSize((ContentSetting.size + 10) * 5, (ContentSetting.size + 10) * 5);
                 targetButton.setBorderPainted(false);
                 targetButton.setContentAreaFilled(false);
                 targetButton.setLocation(targetX, targetY);
@@ -249,7 +256,7 @@ public class StartScreen extends JFrame {
 
                 // RandomMove 쓰레드 생성 후 실행 -> 쓰레드는 종료되면 다시 사용 불가능 하기 때문에 반복적으로 쓰레드 생성
                 randomMove = new RandomMove(container);
-                randomMove.start();
+                if (mode1Selected) randomMove.start();
 
                 // 타겟 클릭 액션리스너
                 targetButton.addActionListener(new ActionListener() {
@@ -265,7 +272,7 @@ public class StartScreen extends JFrame {
                 totalCount++; // 총 출현 타겟 횟수 증가
                 container.repaint();
                 try {
-                    sleep(1000 - (11 - MainScreen.frequency) * 50); // 설정한 frequency에 맞춰 시간 설정
+                    sleep(1000 - (11 - ContentSetting.frequency) * 50); // 설정한 frequency에 맞춰 시간 설정
                     randomMove.setMoveStopThread(true); // 시간 끝나면 RandomMove 쓰레드 종료
                     container.remove(targetButton);
                 } catch (InterruptedException e) {

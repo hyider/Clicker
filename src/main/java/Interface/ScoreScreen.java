@@ -5,6 +5,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static Interface.ContentSetting.*;
+
 public class ScoreScreen extends JFrame {
     public static int hitCount, missCount, totalCount; // 카운트 변수2
     public static double percent; // 타겟을 맞춘 퍼센트 변수
@@ -15,57 +17,57 @@ public class ScoreScreen extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // 창을 닫으면 창이 사라짐
 
         Container container = getContentPane(); // 프레임에 부착된 컨텐트팬 알아내기
-        container.setBackground(MainScreen.backGroundColor); // 컨텐트팬의 색 backGroundColor 설정
+        container.setBackground(backGroundColor); // 컨텐트팬의 색 backGroundColor 설정
         container.setLayout(null); // 컨텐트팬의 배치관리자 없음
 
         // ===[Title_Label]==================================================================================
         JLabel scoreTitle = new JLabel("Score"); // scroreTitle 라벨 문자열과 함께 생성
-        MainScreen.settingItalicLabel(scoreTitle,35,35,300,65,80);
+        settingItalicLabel(scoreTitle,35,35,300,65,80);
         container.add(scoreTitle); // 컨텐트팬에 scoreTitle 라벨 부착
 
         // ===[Time_Label]==================================================================================
         JLabel timeLabel = new JLabel("Time"); // timeLabel 라벨 문자열과 함께 생성
-        MainScreen.settingBoldLabel(timeLabel,5,110,200,50,40);
+        settingBoldLabel(timeLabel,5,110,200,50,40);
         container.add(timeLabel);
 
         // ====[TimeValue_Label]===============================================================================
-        JLabel timeValueLabel = new JLabel(String.valueOf(MainScreen.time));
-        MainScreen.settingBoldLabel(timeValueLabel,200,110,200,50,40);
+        JLabel timeValueLabel = new JLabel(String.valueOf(ContentSetting.time));
+        settingBoldLabel(timeValueLabel,200,110,200,50,40);
         container.add(timeValueLabel);
 
         // ====[TotalCount_Label]================================================================================
         JLabel totalCountLabel = new JLabel("Total"); // 나타난 타겟을 카운트로 잡아서 변수로 넣어서 옮기기
-        MainScreen.settingBoldLabel(totalCountLabel,5,160,200,50,40);
+        settingBoldLabel(totalCountLabel,5,160,200,50,40);
         container.add(totalCountLabel);
 
         // ====[TotalCountValue_Label]===========================================================================
         JLabel totalValueLabel = new JLabel(String.valueOf(totalCount));
-        MainScreen.settingBoldLabel(totalValueLabel,200,160,200,50,40);
+        settingBoldLabel(totalValueLabel,200,160,200,50,40);
         container.add(totalValueLabel);
 
         JLabel hitCountLabel = new JLabel("Hit");
-        MainScreen.settingBoldLabel(hitCountLabel,5,210,200,50,40);
+        settingBoldLabel(hitCountLabel,5,210,200,50,40);
         container.add(hitCountLabel);
 
         JLabel hitCountValueLabel = new JLabel(String.valueOf(hitCount));
-        MainScreen.settingBoldLabel(hitCountValueLabel,200,210,200,50,40);
+        settingBoldLabel(hitCountValueLabel,200,210,200,50,40);
         container.add(hitCountValueLabel);
 
         JLabel missCountLabel = new JLabel("Miss");
-        MainScreen.settingBoldLabel(missCountLabel,5,260,200,50,40);
+        settingBoldLabel(missCountLabel,5,260,200,50,40);
         container.add(missCountLabel);
 
         JLabel missCountValueLabel = new JLabel(String.valueOf(missCount));
-        MainScreen.settingBoldLabel(missCountValueLabel,200,260,200,50,40);
+        settingBoldLabel(missCountValueLabel,200,260,200,50,40);
         container.add(missCountValueLabel);
 
         percentToString = String.format("%.2f",percent) + "%";
         JLabel resultLabel = new JLabel(percentToString);
-        MainScreen.settingBoldLabel(resultLabel,70,340,250,50,60);
+        settingBoldLabel(resultLabel,70,340,250,50,60);
         container.add(resultLabel);
 
         JLabel gradeLabel = new JLabel();
-        MainScreen.settingBoldLabel(gradeLabel,400,65,300,160,200);
+        settingBoldLabel(gradeLabel,400,65,300,160,200);
         container.add(gradeLabel);
 
         // 등급을 정하기
@@ -84,12 +86,12 @@ public class ScoreScreen extends JFrame {
         }
 
         JButton mainButton = new JButton("Main");
-        MainScreen.settingButton(mainButton,350,350,175,75,40);
+        settingButton(mainButton,350,350,175,75,40);
         container.add(mainButton);
         clickEvent(mainButton,"Main");
 
         JButton replayButton = new JButton("Replay");
-        MainScreen.settingButton(replayButton,570,350,175,75,40);
+        settingButton(replayButton,570,350,175,75,40);
         container.add(replayButton);
         clickEvent(replayButton,"Replay");
 

@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static Interface.MainScreen.backGroundColor;
+import static Interface.ContentSetting.*;
 
 public class ReadScreen extends JFrame {
     public ReadScreen(){
@@ -18,7 +18,7 @@ public class ReadScreen extends JFrame {
         container.setLayout(null);
 
         JLabel howLabel = new JLabel("How To Use"); // howLabel 라벨 문자열과 함께 생성
-        MainScreen.settingBoldLabel(howLabel,10,0,300,50,40);
+        settingBoldLabel(howLabel,10,0,300,50,40);
         container.add(howLabel); // 컨텐트팬에 howLabel 라벨 부착
 
         String howText = """
@@ -39,7 +39,7 @@ public class ReadScreen extends JFrame {
         container.add(how);
 
         JLabel patchNoteLabel = new JLabel("Patch Note"); // patchNoteLabel 라벨 문자열과 함께 생성
-        MainScreen.settingBoldLabel(patchNoteLabel,400,0,300,50,40);
+        settingBoldLabel(patchNoteLabel,400,0,300,50,40);
         container.add(patchNoteLabel); // 컨텐트팬에 patchNoteLabel 라벨 부착
 
         String patchNoteText = """
@@ -111,7 +111,7 @@ public class ReadScreen extends JFrame {
         container.add(patchNoteTextArea);
 
         JButton preButton = new JButton("Pre");
-        MainScreen.settingButton(preButton,650,400,100,50,40);
+        settingButton(preButton,650,400,100,50,40);
         container.add(preButton); // 컨텐트팬에 preButton 버튼 부착
 
         preButton.addActionListener(new ActionListener() {
