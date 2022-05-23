@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static Interface.ContentSetting.*;
+import static Interface.Controller.*;
 
 public class ReadScreen extends JFrame {
     public ReadScreen(){

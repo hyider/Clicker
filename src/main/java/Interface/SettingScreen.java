@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static Interface.ContentSetting.*;
+import static Interface.Controller.*;
 import static Interface.MainScreen.*;
 
 public class SettingScreen extends JFrame {
@@ -30,9 +30,9 @@ public class SettingScreen extends JFrame {
     public static JSlider timeSlider;
 
     SettingScreen() {
-        size = ContentSetting.size;
+        size = Controller.size;
         frequency = frequencySliderShow;
-        time = ContentSetting.time;
+        time = Controller.time;
 
         setTitle("Setting");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -171,11 +171,11 @@ public class SettingScreen extends JFrame {
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ContentSetting.size = size;
+                Controller.size = size;
                 frequencySliderShow = frequency; // Freq의 값을 보여지는 부분
-                ContentSetting.frequency = 10 - (frequency-1); // 실제로 전달되는 Freq의 값
+                Controller.frequency = 10 - (frequency-1); // 실제로 전달되는 Freq의 값
                 // Freq가 높아질수록 Target 쓰레드 sleep()의 인자로 전달되는 값이 작아져야 하기 때문
-                ContentSetting.time = time;
+                Controller.time = time;
                 modeJLabel.setText("Mode : " + modeLabel.getText());
                 dispose();
             }

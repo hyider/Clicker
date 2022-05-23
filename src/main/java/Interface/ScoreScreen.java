@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static Interface.ContentSetting.*;
+import static Interface.Controller.*;
 
 public class ScoreScreen extends JFrame {
     public static int hitCount, missCount, totalCount; // 카운트 변수2
@@ -31,7 +31,7 @@ public class ScoreScreen extends JFrame {
         container.add(timeLabel);
 
         // ====[TimeValue_Label]===============================================================================
-        JLabel timeValueLabel = new JLabel(String.valueOf(ContentSetting.time));
+        JLabel timeValueLabel = new JLabel(String.valueOf(Controller.time));
         settingBoldLabel(timeValueLabel,200,110,200,50,40);
         container.add(timeValueLabel);
 

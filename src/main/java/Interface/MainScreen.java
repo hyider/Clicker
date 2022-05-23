@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static Interface.ContentSetting.*;
+import static Interface.Controller.*;
 
 // 프로그램 실행 시 가장 처음 나오는 화면
 public class MainScreen extends JFrame {
@@ -75,7 +75,6 @@ public class MainScreen extends JFrame {
 
         settingScreen(800,500,false,null,true);
     }
-
 
     // 테스트용 이벤트리스너
     public void clickEvent(JButton buttonName, String className) {
