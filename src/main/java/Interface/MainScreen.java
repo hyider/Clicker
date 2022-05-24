@@ -1,9 +1,12 @@
 package Interface;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 
 import static Interface.Controller.*;
 
@@ -73,6 +76,7 @@ public class MainScreen extends JFrame {
             default: break;
         }
 
+
         settingScreen(800,500,false,null,true);
     }
 
@@ -93,7 +97,9 @@ public class MainScreen extends JFrame {
                             // 경고창 생성 후 SettingScreen 객체 생성
                             JOptionPane.showMessageDialog(null,"Select Mode!","ERROR", JOptionPane.ERROR_MESSAGE);
                             new SettingScreen();
-                        } else new StartScreen(); // StartScreen 객체 생성
+                        } else {
+                            new StartScreen(); // StartScreen 객체 생성
+                        }
                         break;
                     default: System.exit(0);
                 }

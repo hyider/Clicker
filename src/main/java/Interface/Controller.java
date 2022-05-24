@@ -80,22 +80,4 @@ public class Controller extends JFrame {
         targetButton.setContentAreaFilled(false);
     }
 
-
-    public static void targetClickAudio() {
-        try {
-            Clip clip = AudioSystem.getClip();
-            File audioFile = new File("src/main/resources/TargetClick.wav");
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
-            clip.open(audioInputStream);
-            clip.start();
-        } catch (LineUnavailableException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (UnsupportedAudioFileException e) {
-            e.printStackTrace();
-        }
-
-    }
-
 }

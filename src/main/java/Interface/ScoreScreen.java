@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 import static Interface.Controller.*;
 
 public class ScoreScreen extends JFrame {
-    public static int hitCount, missCount, totalCount; // 카운트 변수2
+    public static int hitCount, missCount, totalCount, score; // 카운트 변수2
     public static double percent; // 타겟을 맞춘 퍼센트 변수
     public static String percentToString; // 퍼센트 변수를 문자열로 변환하여 저장하는 변수
 
