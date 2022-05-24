@@ -14,7 +14,7 @@ import static Interface.Controller.*;
 public class MainScreen extends JFrame {
     public static JLabel title, version, modeJLabel; // 게임 모드를 나타내는 라벨
     public static JButton startButton, readButton, settingButton, quitButton;
-    public static Clip start;
+    public static Clip hit, miss, start;
 
     public static int listIndex = 2018041089;
 
@@ -78,9 +78,17 @@ public class MainScreen extends JFrame {
         }
 
         try {
+            hit = AudioSystem.getClip();
+            miss = AudioSystem.getClip();
             start = AudioSystem.getClip();
+            File hitSoundFile = new File("src/main/resources/TargetClick.wav");
+            File missSoundFile = new File("src/main/resources/BackgroundClick.wav");
             File startSoundFile = new File("src/main/resources/StartCount.wav");
+            AudioInputStream hitAudioInputStream = AudioSystem.getAudioInputStream(hitSoundFile);
+            AudioInputStream missAudioInputStream = AudioSystem.getAudioInputStream(missSoundFile);
             AudioInputStream startAudioInputStream = AudioSystem.getAudioInputStream(startSoundFile);
+            hit.open(hitAudioInputStream);
+            miss.open(missAudioInputStream);
             start.open(startAudioInputStream);
             start.start();
             start.stop();

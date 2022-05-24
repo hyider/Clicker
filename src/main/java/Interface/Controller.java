@@ -15,7 +15,7 @@ public class Controller extends JFrame {
     public static int frequencySliderShow = 1;
     public static int speed = 1;
     public static int mode2 = 1;
-    public static int mode3 = 1;// 게임 속성 변수
+    public static int mode3 = 1;
     public static boolean mode1Selected = false;
     public static boolean mode2Selected = false;
     public static boolean mode3Selected = false;

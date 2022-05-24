@@ -4,21 +4,14 @@ import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.io.IOException;
-import java.util.LinkedList;
-
 import static Interface.Controller.*;
+import static Interface.MainScreen.*;
 
 public class StartScreen extends JFrame {
     public static int hitCount = 0;
     public static int missCount = 0;
     public static int totalCount = 0;
     public static int timeCount = Controller.time;
-
-    public static Clip hit;
-    public static Clip miss;
-    public static Clip start;
 
     public static int targetX, targetY;
     public static int setTargetX, setTargetY;
@@ -36,29 +29,7 @@ public class StartScreen extends JFrame {
         container.setLayout(null);
         container.setBackground(backGroundColor);
 
-        // 커넥터 메서드 생각해보기
-        try {
-            hit = AudioSystem.getClip();
-            miss = AudioSystem.getClip();
-
-            File hitSoundFile = new File("src/main/resources/TargetClick.wav");
-            File missSoundFile = new File("src/main/resources/BackgroundClick.wav");
-
-            AudioInputStream hitAudioInputStream = AudioSystem.getAudioInputStream(hitSoundFile);
-            AudioInputStream missAudioInputStream = AudioSystem.getAudioInputStream(missSoundFile);
-
-            hit.open(hitAudioInputStream);
-            miss.open(missAudioInputStream);
-
-        } catch (LineUnavailableException e) {
-            e.printStackTrace();
-        } catch (UnsupportedAudioFileException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        MainScreen.start.start();
+        start.start();
 
         JButton stop = new JButton("S");
         settingButton(stop,735,0,50,50,20);
