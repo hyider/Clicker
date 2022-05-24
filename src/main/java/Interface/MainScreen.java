@@ -14,6 +14,7 @@ import static Interface.Controller.*;
 public class MainScreen extends JFrame {
     public static JLabel title, version, modeJLabel; // 게임 모드를 나타내는 라벨
     public static JButton startButton, readButton, settingButton, quitButton;
+    public static Clip start;
 
     public static int listIndex = 2018041089;
 
@@ -74,6 +75,21 @@ public class MainScreen extends JFrame {
             case 3:
                 modeJLabel.setText("Mode : Hard"); break;
             default: break;
+        }
+
+        try {
+            start = AudioSystem.getClip();
+            File startSoundFile = new File("src/main/resources/StartCount.wav");
+            AudioInputStream startAudioInputStream = AudioSystem.getAudioInputStream(startSoundFile);
+            start.open(startAudioInputStream);
+            start.start();
+            start.stop();
+        } catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        } catch (LineUnavailableException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
 

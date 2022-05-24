@@ -18,7 +18,7 @@ public class StartScreen extends JFrame {
 
     public static Clip hit;
     public static Clip miss;
-    public static Clip ready;
+    public static Clip start;
 
     public static int targetX, targetY;
     public static int setTargetX, setTargetY;
@@ -40,16 +40,16 @@ public class StartScreen extends JFrame {
         try {
             hit = AudioSystem.getClip();
             miss = AudioSystem.getClip();
-            ready = AudioSystem.getClip();
+
             File hitSoundFile = new File("src/main/resources/TargetClick.wav");
             File missSoundFile = new File("src/main/resources/BackgroundClick.wav");
-            File readySoundFile = new File("src/main/resources/ReadyCountBeep.wav");
+
             AudioInputStream hitAudioInputStream = AudioSystem.getAudioInputStream(hitSoundFile);
             AudioInputStream missAudioInputStream = AudioSystem.getAudioInputStream(missSoundFile);
-            AudioInputStream readyAudioInputStream = AudioSystem.getAudioInputStream(readySoundFile);
+
             hit.open(hitAudioInputStream);
             miss.open(missAudioInputStream);
-            ready.open(readyAudioInputStream);
+
         } catch (LineUnavailableException e) {
             e.printStackTrace();
         } catch (UnsupportedAudioFileException e) {
@@ -57,6 +57,8 @@ public class StartScreen extends JFrame {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        MainScreen.start.start();
 
         JButton stop = new JButton("S");
         settingButton(stop,735,0,50,50,20);
@@ -82,7 +84,7 @@ public class StartScreen extends JFrame {
         settingScreen(800,800,false,null,true);
 
         // 타이머 쓰레드 객체 생성 및 쓰레드 실행
-        MainThread mainThread = new MainThread(container, hit, miss, ready);
+        MainThread mainThread = new MainThread(container, hit, miss, start);
         mainThread.start();
         Timer timer = new Timer(timeCountLabel);
         timer.start();
@@ -135,13 +137,13 @@ public class StartScreen extends JFrame {
         private MovingModeThread movingModeThread;
         private JLabel readyLabel;
 
-        private Clip hit, miss, ready;
+        private Clip hit, miss, start;
 
-        public MainThread(Container container, Clip hit, Clip miss, Clip ready) {
+        public MainThread(Container container, Clip hit, Clip miss, Clip start) {
             this.container = container;
             this.hit = hit;
             this.miss = miss;
-            this.ready = ready;
+            //this.start = start;
         }
 
         @Override
@@ -150,6 +152,7 @@ public class StartScreen extends JFrame {
              * 게임 시작 카운트다운 구현 영역
              */
             String readyCount = null;
+
             for (int i = 3; i > 0; i--) {
                 switch (i) {
                     case 1: readyCount = " One"; break;
@@ -160,7 +163,6 @@ public class StartScreen extends JFrame {
                 readyLabel = new JLabel(readyCount);
                 settingBoldLabel(readyLabel,300,400,200,50,50);
                 container.add(readyLabel);
-                hit.start();
                 container.repaint();
                 try {
                     sleep(1000); // 약 1초 대기
@@ -168,7 +170,6 @@ public class StartScreen extends JFrame {
                     e.printStackTrace();
                 }
                 container.remove(readyLabel);
-                hit.setFramePosition(0);
                 container.repaint();
             }
 
@@ -193,6 +194,7 @@ public class StartScreen extends JFrame {
                  * 타이머가 0까지 도달했을 경우 수행
                  */
                 if (timeCount == 0) { // 타임카운트가 0이 되면
+                    MainScreen.start.setFramePosition(0);
                     ScoreScreen.percent = ((double)hitCount/(double)totalCount)*100; // 맞춘 퍼센트 ScoreScreen에 전달
                     ScoreScreen.totalCount = totalCount; // 총 타겟 출현 갯수 ScoreScreen에 전달
                     ScoreScreen.hitCount = hitCount; // 타겟 클릭 횟수 ScoreScreen에 전달
