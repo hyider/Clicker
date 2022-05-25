@@ -4,6 +4,7 @@ import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+
 import static Interface.Controller.*;
 import static Interface.MainScreen.*;
 
@@ -55,7 +56,7 @@ public class StartScreen extends JFrame {
         settingScreen(800,800,false,null,true);
 
         // 타이머 쓰레드 객체 생성 및 쓰레드 실행
-        MainThread mainThread = new MainThread(container, hit, miss, start);
+        MainThread mainThread = new MainThread(container, hit, miss);
         mainThread.start();
         Timer timer = new Timer(timeCountLabel);
         timer.start();
@@ -103,18 +104,18 @@ public class StartScreen extends JFrame {
     }
 
     class MainThread extends Thread {
-        private Container container;
         private DefaultModeThread defaultModeThread;
         private MovingModeThread movingModeThread;
+
+        private Container container;
         private JLabel readyLabel;
 
-        private Clip hit, miss, start;
+        private Clip hit, miss;
 
-        public MainThread(Container container, Clip hit, Clip miss, Clip start) {
+        public MainThread(Container container, Clip hit, Clip miss) {
             this.container = container;
             this.hit = hit;
             this.miss = miss;
-            //this.start = start;
         }
 
         @Override
@@ -283,6 +284,9 @@ public class StartScreen extends JFrame {
                     return;
                 }
 
+                /**
+                 * selectMoveToCrossOrDiagonal이 0면 직선, 1이면 대각선
+                 */
                 switch (selectMoveToCrossOrDiagonal) {
                     /**
                      * 직선으로 이동하는 케이스

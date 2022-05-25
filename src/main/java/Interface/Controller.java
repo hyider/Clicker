@@ -1,9 +1,7 @@
 package Interface;
 
-import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
 
 public class Controller extends JFrame {
     public static Color backGroundColor = new Color(86,187,241); // 배경색 설정

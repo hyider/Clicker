@@ -37,7 +37,7 @@ public class SettingModeScreen extends JFrame {
         container.add(title); // 컨텐트팬에 title 라벨 부착
 
         /**
-         * 첫번쨰 모드
+         * 첫번쨰 모드 : Moving_Mode
          */
         JButton mode1 = new JButton("Move");
         settingButton(mode1,200,30,100,50,20);
@@ -50,9 +50,11 @@ public class SettingModeScreen extends JFrame {
         speedSlider.setEnabled(mode1Selected);
         container.add(speedSlider);
         changeEventSlider(speedSlider);
+
         JLabel speedLabel = new JLabel("Speed");
         settingPlainLabel(speedLabel,10,100,150,50,40); // 타임라벨 위치 재선정
         container.add(speedLabel);
+
         valueOfSpeed = new JLabel(String.valueOf(speed));
         settingPlainLabel(valueOfSpeed,150,100,50,50,40); // 타임라벨 위치 재선정
         container.add(valueOfSpeed);
@@ -144,7 +146,7 @@ public class SettingModeScreen extends JFrame {
             }
         });
 
-        JButton saveModeButton = new JButton("Save"); // saveButton 버튼 문자열과 함께 생성
+        JButton saveModeButton = new JButton("Save");
         settingButton(saveModeButton,600,380,150,50,30);
         container.add(saveModeButton); // 컨텐트팬에 saveButton 버튼 부착
         saveModeButton.addActionListener(new ActionListener() {
