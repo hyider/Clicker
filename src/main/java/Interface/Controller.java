@@ -9,14 +9,16 @@ public class Controller extends JFrame {
 
     public static int size = 1;
     public static int frequency = 1;
+    public static long defaultFrequency = 1;
+    public static long shieldFrequency = 1;
     public static int time = 10;
     public static int frequencySliderShow = 1;
     public static int speed = 1;
-    public static int mode2 = 1;
-    public static int mode3 = 1;
-    public static boolean mode1Selected = false;
-    public static boolean mode2Selected = false;
-    public static boolean mode3Selected = false;
+    public static int defense = 1;
+    public static int item = 1;
+    public static boolean movingModeSelected = false;
+    public static boolean shieldModeSelected = false;
+    public static boolean itemModeSelected = false;
 
     public static void settingButton(JButton buttonName, int locationX, int locationY, int sizeX, int sizeY,int fontSize){
         buttonName.setFont(new Font("Slab Serif", Font.BOLD, fontSize)); // 폰트 설정, 폰트 크기 인자로 받아 설정
@@ -34,13 +36,13 @@ public class Controller extends JFrame {
     }
 
     public static void settingBoldLabel(JLabel labelName, int locationX, int locationY, int sizeX, int sizeY, int fontSize) {
-        labelName.setFont(new Font("Slab Serif",Font.BOLD,fontSize)); // 폰트 설정 - BOLD, 폰트 크기 인자로 받아 설정
+        labelName.setFont(new Font("HY 둥근고딕",Font.BOLD,fontSize)); // 폰트 설정 - BOLD, 폰트 크기 인자로 받아 설정
         labelName.setForeground(Color.WHITE); // 글씨 색 하얀색 설정
         labelName.setLocation(locationX,locationY); // 라벨의 위치 인자로 받아 설정
         labelName.setSize(sizeX,sizeY); // 라벨의 크기 인자로 받아 설정
     }
     public static void settingItalicLabel(JLabel labelName, int locationX, int locationY, int sizeX, int sizeY, int fontSize) {
-        labelName.setFont(new Font("Slab Serif",Font.ITALIC,fontSize)); // 폰트 설정 - ITALIC, 폰트 크기 인자로 받아 설정
+        labelName.setFont(new Font("Arial Rounded",Font.ITALIC,fontSize)); // 폰트 설정 - ITALIC, 폰트 크기 인자로 받아 설정
         labelName.setForeground(Color.WHITE); // 글씨 색 하얀색 설정
         labelName.setLocation(locationX,locationY); // 라벨의 위치 인자로 받아 설정
         labelName.setSize(sizeX,sizeY); // 라벨의 크기 인자로 받아 설정

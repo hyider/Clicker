@@ -32,7 +32,7 @@ public class MainScreen extends JFrame {
         container.add(title);
 
         // ====[버젼]====================================================================================================
-        version = new JLabel("version_test"); // version 라벨 문자열과 함께 생성
+        version = new JLabel("version_0.2"); // version 라벨 문자열과 함께 생성
         settingItalicLabel(version,50,150,150,25,20);
         container.add(version); // 컨텐트팬에 version 라벨 부착
 

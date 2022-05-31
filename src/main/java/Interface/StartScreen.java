@@ -4,6 +4,8 @@ import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Stack;
 
 import static Interface.Controller.*;
 import static Interface.MainScreen.*;
@@ -13,6 +15,11 @@ public class StartScreen extends JFrame {
     public static int missCount = 0;
     public static int totalCount = 0;
     public static int timeCount = Controller.time;
+    public static int imageCount = 1;
+
+    public static boolean stopGame = false;
+
+    public static int defense = Controller.defense;
 
     public static int targetX, targetY;
     public static int setTargetX, setTargetY;
@@ -23,9 +30,18 @@ public class StartScreen extends JFrame {
     public static JLabel missCountLabel;
     public static JLabel timeCountLabel;
 
+    public static ArrayList<ImageIcon> aShieldTargetImage;
+    public static ArrayList<Image> aShieldTargetScale;
+    public static ArrayList<ImageIcon> aShieldTarget;
+    public static ArrayList<JButton> aShieldTargetButton;
+
     public StartScreen() {
         setTitle("Start");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        //setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //setUndecorated(true);
+
         Container container = getContentPane();
         container.setLayout(null);
         container.setBackground(backGroundColor);
@@ -35,6 +51,12 @@ public class StartScreen extends JFrame {
         JButton stop = new JButton("S");
         settingButton(stop,735,0,50,50,20);
         container.add(stop);
+        stop.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                stopGame = true;
+            }
+        });
 
         // 타겟 클릭 횟수 라벨
         hitCountLabel = new JLabel("Score : " + hitCount);
@@ -47,28 +69,54 @@ public class StartScreen extends JFrame {
         container.add(missCountLabel);
 
         // 시간 라벨
-        timeCount = Controller.time;
+        timeCount = time;
         timeCountLabel = new JLabel("Time : " + timeCount);
         settingBoldLabel(timeCountLabel,215,0,200,50,40);
         container.add(timeCountLabel);
 
+        aShieldTargetImage = new ArrayList<>();
+        aShieldTargetScale = new ArrayList<>();
+        aShieldTarget = new ArrayList<>();
+        aShieldTargetButton = new ArrayList<>();
+
+        while(imageCount < 11) {
+            aShieldTargetImage.add(new ImageIcon("src/main/resources/TargetNumber" + imageCount + ".png"));
+            aShieldTargetScale.add(((aShieldTargetImage.get(imageCount-1)).getImage()).getScaledInstance((Controller.size+10)*5,(Controller.size+10)*5,Image.SCALE_SMOOTH));
+            aShieldTarget.add(new ImageIcon(aShieldTargetScale.get(imageCount-1)));
+            aShieldTargetButton.add(new JButton(aShieldTarget.get(imageCount-1)));
+            imageCount++;
+        }
+        imageCount = 1;
+
         // 화면 구성
         settingScreen(800,800,false,null,true);
 
+
         // 타이머 쓰레드 객체 생성 및 쓰레드 실행
-        MainThread mainThread = new MainThread(container, hit, miss);
-        mainThread.start();
         Timer timer = new Timer(timeCountLabel);
         timer.start();
+
+        DefaultModeThread defaultModeThread = new DefaultModeThread();
+        defaultModeThread.start();
+
+        MainThread mainThread = new MainThread(timer, defaultModeThread, container, aShieldTargetButton, hit, miss);
+        mainThread.start();
+
     }
 
     // 타이머 쓰레드
     class Timer extends Thread {
         private JLabel timeCountLabel;
+        private boolean timerStop;
+
 
         // 타이머 쓰레드 클래스 생성자 - 외부에서 시간 라벨을 가져옴
         public Timer(JLabel timeCountLabel) {
             this.timeCountLabel = timeCountLabel;
+        }
+
+        public void setTimerStop(boolean timerStop) {
+            this.timerStop = timerStop;
         }
 
         // 쓰레드 실행 부분
@@ -88,15 +136,16 @@ public class StartScreen extends JFrame {
                  */
                 timeCount--; // 외부에서 설정된 타임카운트의 수 1줄임
                 timeCountLabel.setText("Time : " + timeCount); // 줄인 숫자로 타임카운트라벨 수정
-                System.out.println(timeCount);
+
                 try {
                     sleep(1000); // 약 1초 동안 대기
+                    System.out.println(timeCount);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                if(timeCount == 0) {
-                    System.out.println("End");
-                    timeCount = Controller.time; // 타임 카운트에 처음 설정된 타임 값 전달
+                // 쓰레드 종료 여부 결정
+                if (timerStop) {
+                    timerStop = false;
                     return;
                 }
             }
@@ -104,16 +153,22 @@ public class StartScreen extends JFrame {
     }
 
     class MainThread extends Thread {
+        private Timer timer;
         private DefaultModeThread defaultModeThread;
         private MovingModeThread movingModeThread;
+        private ShieldModeThread shieldModeThread;
 
         private Container container;
         private JLabel readyLabel;
+        private ArrayList<JButton> aShieldTargetButton;
 
         private Clip hit, miss;
 
-        public MainThread(Container container, Clip hit, Clip miss) {
+        public MainThread(Timer timer, DefaultModeThread defaultModeThread, Container container, ArrayList<JButton> aShieldTargetButton, Clip hit, Clip miss) {
+            this.timer = timer;
+            this.defaultModeThread = defaultModeThread;
             this.container = container;
+            this.aShieldTargetButton = aShieldTargetButton;
             this.hit = hit;
             this.miss = miss;
         }
@@ -147,25 +202,29 @@ public class StartScreen extends JFrame {
 
             /**
              * 타겟 외의 구역을 클릭 시 missCount가 증가하는 마우스리스너
+             * 같은 좌표를 두번 이상 클릭하면 집계안함
              */
             container.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
                     super.mousePressed(e);
-                    miss.start();
-                    miss.setFramePosition(0);
-                    missCount++; // 미스 카운트 1 증가
-                    missCountLabel.setText("Miss : " + missCount); // 라벨 변경
-                    container.repaint();
+                    if(e.getClickCount()>1) {
+                    } else {
+                        miss.start();
+                        miss.setFramePosition(0);
+                        missCount++; // 미스 카운트 1 증가
+                        missCountLabel.setText("Miss : " + missCount); // 라벨 변경
+                        container.repaint();
+                    }
                 }
             });
-            defaultModeThread = new DefaultModeThread();
-            defaultModeThread.start();
+
             while(true) {
                 /**
                  * 타이머가 0까지 도달했을 경우 수행
                  */
-                if (timeCount == 0) { // 타임카운트가 0이 되면
+                if (timeCount < 0 || stopGame == true) { // 타임카운트가 0이 되면
+                    System.out.println("[1] 게임끝!");
                     MainScreen.start.setFramePosition(0);
                     ScoreScreen.percent = ((double)hitCount/(double)totalCount)*100; // 맞춘 퍼센트 ScoreScreen에 전달
                     ScoreScreen.totalCount = totalCount; // 총 타겟 출현 갯수 ScoreScreen에 전달
@@ -173,31 +232,41 @@ public class StartScreen extends JFrame {
                     ScoreScreen.missCount = missCount; // 타겟 외 클릭 횟수 ScoreScreen에 전달
                     dispose(); // 창 닫힘
                     new ScoreScreen(); // ScoreScreen 실행
-
                     hitCount = 0; // 타겟 클릭 횟수 0으로 초기화
                     missCount = 0; // 타겟 외 클릭 횟수 0으로 초기화
                     totalCount = 0; // 총 출현 타겟 갯수 0으로 초기화
+                    defense = Controller.defense;
+                    timer.setTimerStop(true);
+                    defaultModeThread.setDefaultModeStop(true); // DefaultModeThread 쓰레드 종료
                     movingModeThread.setMovingModeStop(true); // MovingModeThread 쓰레드 종료
-                    return; // 타이머 쓰레드 종료
+                    shieldModeThread.setShieldModeStop(true); // ShieldModeThread 쓰레드 종료
+                    timeCount = Controller.time; // 타임 카운트에 처음 설정된 타임 값 전달
+                    stopGame = false;
+                    return;
                 }
+
+                setTargetX = targetX;
+                setTargetY = targetY;
+
+                /**
+                 * 모드 실행여부 검사 후 실행
+                 * 총 3가지 [Moving_Mode/Shield_Mode/Item_Mode]
+                 */
+
+                shieldModeThread = new ShieldModeThread(container, aShieldTargetButton);
+                if (shieldModeSelected) shieldModeThread.start();
 
                 /**
                  * Target버튼 속성을 Controller로부터 가져와 부여하여 생성
                  */
                 targetButton = new JButton();
                 Controller.createTarget(targetButton);
-                setTargetX = targetX;
-                setTargetY = targetY;
                 targetButton.setLocation(setTargetX,setTargetY);
                 container.add(targetButton);
                 container.repaint(); // 없으면 안됨!
 
-                /**
-                 * 모드 실행여부 검사 후 실행
-                 * 총 3가지 [Moving_Mode/Shield_Mode/Item_Mode]
-                 */
                 movingModeThread = new MovingModeThread(container);
-                if (mode1Selected) movingModeThread.start();
+                if (movingModeSelected) movingModeThread.start();
 
                 /**
                  * 타겟을 클릭하였을 때 발생하는 이벤트
@@ -216,9 +285,13 @@ public class StartScreen extends JFrame {
                 });
 
                 try {
-                    sleep(1000 - (11 - Controller.frequency) * 50); // 설정한 frequency에 맞춰 시간 설정
+                    if(shieldModeSelected)
+                        sleep(shieldFrequency); // 설정한 frequency에 맞춰 시간 설정
+                    else
+                        sleep(defaultFrequency);
                     totalCount++; // 총 출현 타겟 횟수 증가
                     movingModeThread.setMovingModeStop(true); // 시간 끝나면 MovingModeThread 쓰레드 종료
+                    shieldModeThread.setShieldModeStop(true);
                     container.remove(targetButton);
                     container.repaint();
                 } catch (InterruptedException e) {
@@ -238,16 +311,16 @@ public class StartScreen extends JFrame {
         public void run() {
             while (true) {
                 // 쓰레드 종료 여부 결정
-                if (defaultModeStop == true) {
+                if (defaultModeStop) {
                     defaultModeStop = false;
                     return;
-                } else if (timeCount == 0) return; // 타임 카운트가 0이 되면
+                }
 
                 /**
                  * 타겟의 위치 난수를 발생하여 설정
                  */
-                targetX = ((int)(Math.random() * 700));
-                targetY = ((int)(Math.random() * 615) + 50);
+                targetX = ((int)(Math.random() * 500) + 100);
+                targetY = ((int)(Math.random() * 450) + 150);
             }
         }
     }
@@ -279,10 +352,12 @@ public class StartScreen extends JFrame {
             selectMoveY = ((int)(Math.random()*10))%2;
             while(true) {
                 // 쓰레드 종료 여부 결정
-                if (movingModeStop == true) {
+                if (movingModeStop) {
                     movingModeStop = false;
+                    System.out.println("Kill Moving Mode!");
                     return;
                 }
+                System.out.println("Moving Mode Thread Run");
 
                 /**
                  * selectMoveToCrossOrDiagonal이 0면 직선, 1이면 대각선
@@ -332,7 +407,7 @@ public class StartScreen extends JFrame {
                      * 설정한 speed에 따라 스레드의 반복주기가 변하며
                      * 줄어들 수록 더 빠르게 반복하여 빠르게 이동하는 것으로 보임
                      */
-                    sleep(11 - Controller.speed);
+                    sleep((long) (21 - ((speed)*1.5)));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -341,10 +416,16 @@ public class StartScreen extends JFrame {
     }
 
     class ShieldModeThread extends Thread {
+        private ArrayList<JButton> aShieldTargetButton;
         private Container container;
         private boolean shieldModeStop;
+        private Stack stack;
+        private int stackCreate;
 
-        public ShieldModeThread(Container container) { this.container = container; }
+        public ShieldModeThread(Container container, ArrayList<JButton> aShieldTargetButton) {
+            this.container = container;
+            this.aShieldTargetButton = aShieldTargetButton;
+        }
 
         public void setShieldModeStop(boolean shieldModeStop) {
             this.shieldModeStop = shieldModeStop;
@@ -352,7 +433,60 @@ public class StartScreen extends JFrame {
 
         @Override
         public void run() {
+            // 쓰레드 종료 여부 결정
+            if (shieldModeStop) {
+                shieldModeStop = false;
+                return;
+            }
 
+            int [] defenseArray = {1,2,3,4,5,6,7,8,9,10};
+            stackCreate = 0;
+            defense = Controller.defense;
+            stack = new Stack();
+
+            while (defense > 0) {
+                stack.push(defenseArray[stackCreate]);
+                stackCreate++;
+                defense--;
+            }
+
+            while (!stack.isEmpty()) {
+                int stackNum = (int) stack.pop() - 1;
+                aShieldTargetButton.get(stackNum).setBorderPainted(false);
+                aShieldTargetButton.get(stackNum).setContentAreaFilled(false);
+                aShieldTargetButton.get(stackNum).setSize((Controller.size + 10) * 5, (Controller.size + 10) * 5);
+                aShieldTargetButton.get(stackNum).setLocation(setTargetX, setTargetY);
+                container.add(aShieldTargetButton.get(stackNum));
+                container.repaint();
+                aShieldTargetButton.get(stackNum).addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        container.remove(aShieldTargetButton.get(stackNum));
+                        container.repaint();
+                    }
+                });
+            }
+
+            /**
+             * 쉴드타겟 시간지나면 사라지게 고치기
+             */
+            try {
+                sleep(shieldFrequency);
+                stackCreate = 0;
+                defense = Controller.defense;
+                while (defense > 0) {
+                    stack.push(defenseArray[stackCreate]);
+                    stackCreate++;
+                    defense--;
+                }
+                while(!stack.isEmpty()) {
+                    int stackNum = (int) stack.pop() - 1;
+                    container.remove(aShieldTargetButton.get(stackNum));
+                }
+                container.repaint();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

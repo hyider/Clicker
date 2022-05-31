@@ -11,18 +11,18 @@ import static Interface.Controller.*;
 
 public class SettingModeScreen extends JFrame {
     JLabel valueOfSpeed;
-    JLabel valueOfMode2;
-    JLabel valueOfMode3;
-    public static boolean mode1Selected;
-    public static boolean mode2Selected;
-    public static boolean mode3Selected;
+    JLabel valueOfDefense;
+    JLabel valueOfItem;
+    public static boolean movingModeSelected;
+    public static boolean shieldModeSelected;
+    public static boolean itemModeSelected;
     int speed = Controller.speed;
-    int mode2 = Controller.mode2;
-    int mode3 = Controller.mode3;
+    int defense = Controller.defense;
+    int item = Controller.item;
     SettingModeScreen() {
-        mode1Selected = Controller.mode1Selected;
-        mode2Selected = Controller.mode2Selected;
-        mode3Selected = Controller.mode3Selected;
+        movingModeSelected = Controller.movingModeSelected;
+        shieldModeSelected = Controller.shieldModeSelected;
+        itemModeSelected = Controller.itemModeSelected;
 
         setTitle("Mode");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -39,73 +39,82 @@ public class SettingModeScreen extends JFrame {
         /**
          * 첫번쨰 모드 : Moving_Mode
          */
-        JButton mode1 = new JButton("Move");
-        settingButton(mode1,200,30,100,50,20);
-        if(mode1Selected) mode1.setBackground(Color.BLUE); else mode1.setBackground(buttonColor);
-        container.add(mode1);
+        JButton movingMode = new JButton("Move");
+        settingButton(movingMode,200,30,100,50,20);
+        if(movingModeSelected) movingMode.setBackground(Color.BLUE); else movingMode.setBackground(buttonColor);
+        container.add(movingMode);
 
         JSlider speedSlider = new JSlider(1,10, speed);
-        settingSlider(speedSlider,220,120,550,20, 5);
+        settingSlider(speedSlider,240,120,530,20, 5);
         speedSlider.setName("speedSlider");
-        speedSlider.setEnabled(mode1Selected);
+        speedSlider.setEnabled(movingModeSelected);
         container.add(speedSlider);
         changeEventSlider(speedSlider);
 
         JLabel speedLabel = new JLabel("Speed");
-        settingPlainLabel(speedLabel,10,100,150,50,40); // 타임라벨 위치 재선정
+        settingPlainLabel(speedLabel,10,100,150,50,30); // 타임라벨 위치 재선정
         container.add(speedLabel);
 
-        valueOfSpeed = new JLabel(String.valueOf(speed));
-        settingPlainLabel(valueOfSpeed,150,100,50,50,40); // 타임라벨 위치 재선정
+        if(movingModeSelected) {
+            valueOfSpeed = new JLabel(String.valueOf(speed));
+        } else valueOfSpeed = new JLabel("X");
+        settingPlainLabel(valueOfSpeed,200,100,50,50,30); // 타임라벨 위치 재선정
         container.add(valueOfSpeed);
 
-        mode1.addActionListener(new ActionListener() {
+        movingMode.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mode1Selected = !mode1Selected;
-                if(mode1Selected == true) {
-                    mode1.setBackground(Color.BLUE);
+                movingModeSelected = !movingModeSelected;
+                if(movingModeSelected == true) {
+                    movingMode.setBackground(Color.BLUE);
                     speedSlider.setEnabled(true);
+                    valueOfSpeed.setText(String.valueOf(speed));
                 } else {
-                    mode1.setBackground(buttonColor);
+                    movingMode.setBackground(buttonColor);
                     speedSlider.setEnabled(false);
                     speedSlider.setValue(0);
+                    valueOfSpeed.setText("X");
                 }
             }
         });
 
         /**
-         * 두번째 모드
+         * 두번째 모드 : Shield_Mode
          */
-        JButton mode2Button = new JButton("Mode2");
-        settingButton(mode2Button,350,30,100,50,20);
-        if(mode2Selected) mode2Button.setBackground(Color.BLUE); else mode2Button.setBackground(buttonColor);
-        container.add(mode2Button);
+        JButton shieldModeButton = new JButton("Shield");
+        settingButton(shieldModeButton,350,30,100,50,20);
+        if(shieldModeSelected) shieldModeButton.setBackground(Color.BLUE); else shieldModeButton.setBackground(buttonColor);
+        container.add(shieldModeButton);
 
-        JSlider mode2Slider = new JSlider(1,10, mode2);
-        settingSlider(mode2Slider,220,170,550,20, 5);
-        mode2Slider.setName("mode2Slider");
-        mode2Slider.setEnabled(mode2Selected);
-        container.add(mode2Slider);
-        changeEventSlider(mode2Slider);
-        JLabel mode2Label = new JLabel("Mode2");
-        settingPlainLabel(mode2Label,10,150,150,50,40); // 타임라벨 위치 재선정
-        container.add(mode2Label);
-        valueOfMode2 = new JLabel(String.valueOf(mode2));
-        settingPlainLabel(valueOfMode2,150,150,50,50,40); // 타임라벨 위치 재선정
-        container.add(valueOfMode2);
+        JSlider defenseSlider = new JSlider(1,10, defense);
+        settingSlider(defenseSlider,240,170,530,20, 5);
+        defenseSlider.setName("defenseSlider");
+        defenseSlider.setEnabled(shieldModeSelected);
+        container.add(defenseSlider);
+        changeEventSlider(defenseSlider);
+        JLabel shieldModeLabel = new JLabel("Defense");
+        settingPlainLabel(shieldModeLabel,10,150,150,50,30); // 타임라벨 위치 재선정
+        container.add(shieldModeLabel);
+        if(shieldModeSelected) {
+            valueOfDefense = new JLabel(String.valueOf(defense));
+        } else valueOfDefense = new JLabel("X");
 
-        mode2Button.addActionListener(new ActionListener() {
+        settingPlainLabel(valueOfDefense,200,150,50,50,30); // 타임라벨 위치 재선정
+        container.add(valueOfDefense);
+
+        shieldModeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mode2Selected = !mode2Selected;
-                if(mode2Selected == true) {
-                    mode2Button.setBackground(Color.BLUE);
-                    mode2Slider.setEnabled(true);
+                shieldModeSelected = !shieldModeSelected;
+                if(shieldModeSelected == true) {
+                    shieldModeButton.setBackground(Color.BLUE);
+                    defenseSlider.setEnabled(true);
+                    valueOfDefense.setText(String.valueOf(defense));
                 } else {
-                    mode2Button.setBackground(buttonColor);
-                    mode2Slider.setEnabled(false);
-                    mode2Slider.setValue(0);
+                    shieldModeButton.setBackground(buttonColor);
+                    defenseSlider.setEnabled(false);
+                    defenseSlider.setValue(0);
+                    valueOfDefense.setText("X");
                 }
             }
         });
@@ -113,38 +122,45 @@ public class SettingModeScreen extends JFrame {
         /**
          * 세번째 모드
          */
-        JButton mode3Button = new JButton("Mode3");
-        settingButton(mode3Button,500, 30, 100, 50, 20);
-        if(mode3Selected) mode3Button.setBackground(Color.BLUE); else mode3Button.setBackground(buttonColor);
-        container.add(mode3Button);
+        JButton itemModeButton = new JButton("Item");
+        settingButton(itemModeButton,500, 30, 100, 50, 20);
+        if(itemModeSelected) itemModeButton.setBackground(Color.BLUE); else itemModeButton.setBackground(buttonColor);
+        container.add(itemModeButton);
 
-        JSlider mode3Slider = new JSlider(1,10, speed);
-        settingSlider(mode3Slider,220,220,550,20, 5);
-        mode3Slider.setName("mode3Slider");
-        mode3Slider.setEnabled(mode1Selected);
-        container.add(mode3Slider);
-        changeEventSlider(mode3Slider);
-        JLabel mode3Label = new JLabel("Mode3");
-        settingPlainLabel(mode3Label,10,200,150,50,40); // 타임라벨 위치 재선정
-        container.add(mode3Label);
-        valueOfMode3 = new JLabel(String.valueOf(mode3));
-        settingPlainLabel(valueOfMode3,150,200,50,50,40); // 타임라벨 위치 재선정
-        container.add(valueOfMode3);
+        JSlider itemModeSlider = new JSlider(1,10, speed);
+        settingSlider(itemModeSlider,240,220,530,20, 5);
+        itemModeSlider.setName("itemSlider");
+        itemModeSlider.setEnabled(itemModeSelected);
+        container.add(itemModeSlider);
+        changeEventSlider(itemModeSlider);
+        JLabel itemModeLabel = new JLabel("Item");
+        settingPlainLabel(itemModeLabel,10,200,150,50,30); // 타임라벨 위치 재선정
+        container.add(itemModeLabel);
+        if(itemModeSelected) {
+            valueOfItem = new JLabel(String.valueOf(item));
+        } else valueOfItem = new JLabel("X");
+        settingPlainLabel(valueOfItem,200,200,50,50,30); // 타임라벨 위치 재선정
+        container.add(valueOfItem);
 
-        mode3Button.addActionListener(new ActionListener() {
+        itemModeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mode3Selected = !mode3Selected;
-                if(mode3Selected == true) {
-                    mode3Button.setBackground(Color.BLUE);
-                    mode3Slider.setEnabled(true);
+                itemModeSelected = !itemModeSelected;
+                if(itemModeSelected == true) {
+                    itemModeButton.setBackground(Color.BLUE);
+                    itemModeSlider.setEnabled(true);
+                    valueOfItem.setText(String.valueOf(item));
                 } else {
-                    mode3Button.setBackground(buttonColor);
-                    mode3Slider.setEnabled(false);
-                    mode3Slider.setValue(0);
+                    itemModeButton.setBackground(buttonColor);
+                    itemModeSlider.setEnabled(false);
+                    itemModeSlider.setValue(0);
+                    valueOfItem.setText("X");
                 }
             }
         });
+
+        //shieldModeButton.setEnabled(false);
+        //itemModeButton.setEnabled(false);
 
         JButton saveModeButton = new JButton("Save");
         settingButton(saveModeButton,600,380,150,50,30);
@@ -153,11 +169,11 @@ public class SettingModeScreen extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Controller.speed = speed;
-                Controller.mode1Selected = mode1Selected;
-                Controller.mode2 = mode2;
-                Controller.mode2Selected = mode2Selected;
-                Controller.mode3 = mode3;
-                Controller.mode3Selected = mode3Selected;
+                Controller.movingModeSelected = movingModeSelected;
+                Controller.defense = defense;
+                Controller.shieldModeSelected = shieldModeSelected;
+                Controller.item = item;
+                Controller.itemModeSelected = itemModeSelected;
                 dispose();
             }
         });
@@ -181,13 +197,13 @@ public class SettingModeScreen extends JFrame {
                         speed = sliderName.getValue(); // size에 sliderName의 현재 값 전달
                         valueOfSpeed.setText(String.valueOf(speed)); // valueOfSize의 텍스트 수정
                         break;
-                    case "mode2Slider":
-                        mode2 = sliderName.getValue();
-                        valueOfMode2.setText(String.valueOf(mode2));
+                    case "defenseSlider":
+                        defense = sliderName.getValue();
+                        valueOfDefense.setText(String.valueOf(defense));
                         break;
-                    case "mode3Slider":
-                        mode3 = sliderName.getValue();
-                        valueOfMode3.setText(String.valueOf(mode3));
+                    case "itemSlider":
+                        item = sliderName.getValue();
+                        valueOfItem.setText(String.valueOf(item));
                         break;
                     default:
                         break;

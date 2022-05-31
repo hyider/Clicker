@@ -154,6 +154,16 @@ public class SettingScreen extends JFrame {
         settingPlainLabel(valueOfTime,150,310,50,50,40); // 타임라벨 위치 재선정
         container.add(valueOfTime);
 
+        JButton selectFullScreenButton = new JButton("Full Screen");
+        settingButton(selectFullScreenButton, 50, 380, 200,50,30);
+        container.add(selectFullScreenButton);
+        selectFullScreenButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null,"개발중...","ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
         JButton selectModeButton = new JButton("Mode");
         settingButton(selectModeButton,400, 380,150,50,30);
         container.add(selectModeButton);
@@ -173,7 +183,9 @@ public class SettingScreen extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 Controller.size = size;
                 frequencySliderShow = frequency; // Freq의 값을 보여지는 부분
-                Controller.frequency = 10 - (frequency-1); // 실제로 전달되는 Freq의 값
+                defaultFrequency = 1000 - (11 - (10 - (frequency-1))) * 50;
+                shieldFrequency = (long) ((1000 - (11 - (10 - (frequency-1))) * 50)*1.5);
+                Controller.frequency = (10 - (frequency-1)); // 실제로 전달되는 Freq의 값
                 // Freq가 높아질수록 Target 쓰레드 sleep()의 인자로 전달되는 값이 작아져야 하기 때문
                 Controller.time = time;
                 modeJLabel.setText("Mode : " + modeLabel.getText());

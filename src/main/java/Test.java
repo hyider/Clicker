@@ -47,8 +47,6 @@ public class Test extends JFrame {
             aShieldTargetButton.get(stackNum).setSize(100,100);
             aShieldTargetButton.get(stackNum).setLocation(100,100);
             container.add(aShieldTargetButton.get(stackNum));
-
-
             aShieldTargetButton.get(stackNum).addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
