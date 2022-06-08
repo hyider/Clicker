@@ -154,16 +154,6 @@ public class SettingScreen extends JFrame {
         settingPlainLabel(valueOfTime,150,310,50,50,40); // 타임라벨 위치 재선정
         container.add(valueOfTime);
 
-        JButton selectFullScreenButton = new JButton("Full Screen");
-        settingButton(selectFullScreenButton, 50, 380, 200,50,30);
-        container.add(selectFullScreenButton);
-        selectFullScreenButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null,"개발중...","ERROR", JOptionPane.ERROR_MESSAGE);
-            }
-        });
-
         JButton selectModeButton = new JButton("Mode");
         settingButton(selectModeButton,400, 380,150,50,30);
         container.add(selectModeButton);

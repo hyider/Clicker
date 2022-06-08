@@ -18,6 +18,7 @@ public class StartScreen extends JFrame {
     public static int imageCount = 1;
 
     public static boolean stopGame = false;
+    public static boolean gameOver = false;
 
     public static int defense = Controller.defense;
 
@@ -25,6 +26,7 @@ public class StartScreen extends JFrame {
     public static int setTargetX, setTargetY;
 
     public static JButton targetButton;
+    public static JButton stop;
 
     public static JLabel hitCountLabel;
     public static JLabel missCountLabel;
@@ -37,10 +39,7 @@ public class StartScreen extends JFrame {
 
     public StartScreen() {
         setTitle("Start");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        //setExtendedState(JFrame.MAXIMIZED_BOTH);
-        //setUndecorated(true);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         Container container = getContentPane();
         container.setLayout(null);
@@ -48,7 +47,7 @@ public class StartScreen extends JFrame {
 
         start.start();
 
-        JButton stop = new JButton("S");
+        stop = new JButton("X");
         settingButton(stop,735,0,50,50,20);
         container.add(stop);
         stop.addActionListener(new ActionListener() {
@@ -135,11 +134,12 @@ public class StartScreen extends JFrame {
                  * 타이머 카운트가 0이 되면 타이머 쓰레드 종료
                  */
                 timeCount--; // 외부에서 설정된 타임카운트의 수 1줄임
-                timeCountLabel.setText("Time : " + timeCount); // 줄인 숫자로 타임카운트라벨 수정
+                if (timeCount < 0) timeCountLabel.setText("Time : 0"); // 줄인 숫자로 타임카운트라벨 수정
+                else timeCountLabel.setText("Time : " + timeCount); // 줄인 숫자로 타임카운트라벨 수정
 
                 try {
                     sleep(1000); // 약 1초 동안 대기
-                    System.out.println(timeCount);
+
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -157,6 +157,7 @@ public class StartScreen extends JFrame {
         private DefaultModeThread defaultModeThread;
         private MovingModeThread movingModeThread;
         private ShieldModeThread shieldModeThread;
+        private ItemModeThread itemModeThread;
 
         private Container container;
         private JLabel readyLabel;
@@ -164,7 +165,9 @@ public class StartScreen extends JFrame {
 
         private Clip hit, miss;
 
-        public MainThread(Timer timer, DefaultModeThread defaultModeThread, Container container, ArrayList<JButton> aShieldTargetButton, Clip hit, Clip miss) {
+        public MainThread(Timer timer, DefaultModeThread defaultModeThread, Container container,
+                          ArrayList<JButton> aShieldTargetButton,
+                          Clip hit, Clip miss) {
             this.timer = timer;
             this.defaultModeThread = defaultModeThread;
             this.container = container;
@@ -187,6 +190,8 @@ public class StartScreen extends JFrame {
                     case 3: readyCount = "Three"; break;
                 }
                 // 레디 카운트 라벨 생성
+                stop.setEnabled(false);
+                container.repaint();
                 readyLabel = new JLabel(readyCount);
                 settingBoldLabel(readyLabel,300,400,200,50,50);
                 container.add(readyLabel);
@@ -199,6 +204,8 @@ public class StartScreen extends JFrame {
                 container.remove(readyLabel);
                 container.repaint();
             }
+            stop.setEnabled(true);
+            container.repaint();
 
             /**
              * 타겟 외의 구역을 클릭 시 missCount가 증가하는 마우스리스너
@@ -223,15 +230,19 @@ public class StartScreen extends JFrame {
                 /**
                  * 타이머가 0까지 도달했을 경우 수행
                  */
-                if (timeCount < 0 || stopGame == true) { // 타임카운트가 0이 되면
+                if (timeCount <= 0 || stopGame == true) { // 타임카운트가 0이 되면
                     System.out.println("[1] 게임끝!");
+                    dispose(); // 창 닫힘
                     MainScreen.start.setFramePosition(0);
                     ScoreScreen.percent = ((double)hitCount/(double)totalCount)*100; // 맞춘 퍼센트 ScoreScreen에 전달
                     ScoreScreen.totalCount = totalCount; // 총 타겟 출현 갯수 ScoreScreen에 전달
                     ScoreScreen.hitCount = hitCount; // 타겟 클릭 횟수 ScoreScreen에 전달
                     ScoreScreen.missCount = missCount; // 타겟 외 클릭 횟수 ScoreScreen에 전달
-                    dispose(); // 창 닫힘
-                    new ScoreScreen(); // ScoreScreen 실행
+                    timeCount = Controller.time; // 타임 카운트에 처음 설정된 타임 값 전달
+                    stopGame = false;
+
+                    if (gameOver) new ReadScreen();
+                    else new ScoreScreen(); // ScoreScreen 실행
                     hitCount = 0; // 타겟 클릭 횟수 0으로 초기화
                     missCount = 0; // 타겟 외 클릭 횟수 0으로 초기화
                     totalCount = 0; // 총 출현 타겟 갯수 0으로 초기화
@@ -240,8 +251,7 @@ public class StartScreen extends JFrame {
                     defaultModeThread.setDefaultModeStop(true); // DefaultModeThread 쓰레드 종료
                     movingModeThread.setMovingModeStop(true); // MovingModeThread 쓰레드 종료
                     shieldModeThread.setShieldModeStop(true); // ShieldModeThread 쓰레드 종료
-                    timeCount = Controller.time; // 타임 카운트에 처음 설정된 타임 값 전달
-                    stopGame = false;
+                    itemModeThread.setItemModeStop(true);
                     return;
                 }
 
@@ -267,6 +277,9 @@ public class StartScreen extends JFrame {
 
                 movingModeThread = new MovingModeThread(container);
                 if (movingModeSelected) movingModeThread.start();
+
+                itemModeThread = new ItemModeThread(container);
+                if (itemModeSelected && timeCount%2 == 0) itemModeThread.start();
 
                 /**
                  * 타겟을 클릭하였을 때 발생하는 이벤트
@@ -487,6 +500,129 @@ public class StartScreen extends JFrame {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    class ItemModeThread extends Thread {
+        private Container container;
+        private boolean itemModeStop;
+        private int itemTargetX, itemTargetY;
+        private int selectItem;
+
+        public ItemModeThread(Container container) {
+            this.container = container;
+        }
+
+        public void setItemModeStop(boolean itemModeStop) {
+            this.itemModeStop = itemModeStop;
+        }
+
+        public boolean checkSameLocation(int defaultLocationX, int defaultLocationY, int itemLocationX, int itemLocationY) {
+            if(defaultLocationX <= itemLocationX && itemLocationX <= defaultLocationX + (Controller.size+10)*5)
+                return true;
+            if(defaultLocationY <= itemLocationY && itemLocationY <= defaultLocationY + (Controller.size+10)*5)
+                return true;
+
+            return false;
+        }
+
+        public void setLocationItemTarget() {
+            itemTargetX = ((int)(Math.random() * 500) + 100);
+            itemTargetY = ((int)(Math.random() * 450) + 150);
+
+            if(checkSameLocation(targetX,targetY,itemTargetX,itemTargetY)) {
+                setLocationItemTarget();
+                return;
+            }
+        }
+
+        @Override
+        public void run() {
+
+            if(itemModeStop) {
+                itemModeStop = false;
+                return;
+            }
+
+            /**
+             * 1. 아이템 위치 잡기
+             * 2. 아이템 선택
+             * 3. 아이템 버튼 생성
+             * 4. 아이템 클릭 리스너 생성
+             */
+
+            // 아이템 위치 잡기
+            setLocationItemTarget();
+
+            // 아이템 선택
+            selectItem = ((int)(Math.random() * 3));
+            System.out.println(selectItem);
+
+            String [] item = {"TimeCountUp","TimeCountDown","GameOver"};
+
+            ImageIcon itemTargetImage = new ImageIcon("src/main/resources/" + item[selectItem] + ".png");
+            ImageIcon itemTargetRolloverImage = new ImageIcon("src/main/resources/" + item[selectItem] + "Rollover.png");
+            ImageIcon itemTargetPressedImage = new ImageIcon("src/main/resources/" + item[selectItem] + "Pressed.png");
+
+            Image itemTargetScale = (itemTargetImage.getImage()).getScaledInstance((Controller.size+10)*5,(Controller.size+10)*5,Image.SCALE_SMOOTH);
+            Image itemTargetRolloverScale = (itemTargetRolloverImage.getImage()).getScaledInstance((Controller.size+10)*5,(Controller.size+10)*5,Image.SCALE_SMOOTH);
+            Image itemTargetPressedScale = (itemTargetPressedImage.getImage()).getScaledInstance((Controller.size+10)*5,(Controller.size+10)*5,Image.SCALE_SMOOTH);
+
+            ImageIcon itemTarget = new ImageIcon(itemTargetScale);
+            ImageIcon itemTargetRollover = new ImageIcon(itemTargetRolloverScale);
+            ImageIcon itemTargetPressed = new ImageIcon(itemTargetPressedScale);
+
+            JButton itemTargetButton = new JButton();
+            itemTargetButton.setIcon(itemTarget);
+            itemTargetButton.setRolloverIcon(itemTargetRollover);
+            itemTargetButton.setPressedIcon(itemTargetPressed);
+            itemTargetButton.setSize((Controller.size + 10) * 5, (Controller.size + 10) * 5);
+            itemTargetButton.setLocation(itemTargetX, itemTargetY);
+            itemTargetButton.setBorderPainted(false);
+            itemTargetButton.setContentAreaFilled(false);
+
+            container.add(itemTargetButton);
+
+            /**
+             * case 0 -> Time Count Up      => 시간을 5 늘려줌
+             * case 1 -> Time Count Down    => 시간을 5 줄여줌
+             * case 2 -> Game Over          => 게임 오버
+             */
+            switch (selectItem) {
+                case 0:
+                    itemTargetButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            container.remove(itemTargetButton);
+                            timeCount = timeCount + 5;
+                        }
+                    });
+                    break;
+                case 1:
+                    itemTargetButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            container.remove(itemTargetButton);
+                            timeCount = timeCount - 5;
+                        }
+                    });
+                    break;
+                case 2:
+                    itemTargetButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            container.remove(itemTargetButton);
+                            stopGame = true;
+                            gameOver = true;
+                        }
+                    });
+                    break;
+            }
+            /**
+             * 시간 설정
+             * 버튼 제거 등등 추가
+             */
+
         }
     }
 

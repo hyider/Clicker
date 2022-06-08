@@ -127,12 +127,12 @@ public class SettingModeScreen extends JFrame {
         if(itemModeSelected) itemModeButton.setBackground(Color.BLUE); else itemModeButton.setBackground(buttonColor);
         container.add(itemModeButton);
 
-        JSlider itemModeSlider = new JSlider(1,10, speed);
-        settingSlider(itemModeSlider,240,220,530,20, 5);
-        itemModeSlider.setName("itemSlider");
-        itemModeSlider.setEnabled(itemModeSelected);
-        container.add(itemModeSlider);
-        changeEventSlider(itemModeSlider);
+        JSlider itemSlider = new JSlider(1,10, item);
+        settingSlider(itemSlider,240,220,530,20, 5);
+        itemSlider.setName("itemSlider");
+        itemSlider.setEnabled(itemModeSelected);
+        container.add(itemSlider);
+        changeEventSlider(itemSlider);
         JLabel itemModeLabel = new JLabel("Item");
         settingPlainLabel(itemModeLabel,10,200,150,50,30); // 타임라벨 위치 재선정
         container.add(itemModeLabel);
@@ -148,12 +148,12 @@ public class SettingModeScreen extends JFrame {
                 itemModeSelected = !itemModeSelected;
                 if(itemModeSelected == true) {
                     itemModeButton.setBackground(Color.BLUE);
-                    itemModeSlider.setEnabled(true);
+                    itemSlider.setEnabled(true);
                     valueOfItem.setText(String.valueOf(item));
                 } else {
                     itemModeButton.setBackground(buttonColor);
-                    itemModeSlider.setEnabled(false);
-                    itemModeSlider.setValue(0);
+                    itemSlider.setEnabled(false);
+                    itemSlider.setValue(0);
                     valueOfItem.setText("X");
                 }
             }
