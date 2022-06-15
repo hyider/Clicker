@@ -12,6 +12,7 @@ public class ReadScreen extends JFrame {
         setTitle("Read");
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setAlwaysOnTop(true);
 
         Container container = getContentPane(); // 프레임에 부탁된 컨텐트팬 알아내기
         container.setBackground(backGroundColor); // 컨탠트팬의 색 backGroundColor 설정

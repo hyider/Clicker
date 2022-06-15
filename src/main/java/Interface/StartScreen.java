@@ -49,7 +49,7 @@ public class StartScreen extends JFrame {
         container.setLayout(null);
         container.setBackground(backGroundColor);
 
-        start.start();
+
 
         stop = new JButton("X");
         settingButton(stop,735,0,50,50,20);
@@ -93,6 +93,7 @@ public class StartScreen extends JFrame {
 
         // 화면 구성
         settingScreen(800,800,false,null,true);
+        start.start();
         if(itemModeSelected) setSize(1000,800);
 
 
@@ -676,18 +677,29 @@ public class StartScreen extends JFrame {
                 /**
                  * 아이템 타겟 생성주기 설정
                  */
+                JButton changeItem = new JButton("Change");
+                settingButton(changeItem,795,665,200,100,40 );
+                container.add(changeItem);
+                changeItem.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        dropItem = false;
+                    }
+                });
+
                 System.out.println("ItemMode : Start Drop Item");
                 while(dropItem) {
-                    System.out.print(".");
-                    if(itemTargetY > 600) dropItem = false;
-                    itemTargetY++;
-                    itemTargetButton.setLocation(itemTargetX,itemTargetY);
-                    container.repaint();
                     try {
-                        sleep(Controller.item+50);
+                        sleep(Controller.item*500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    System.out.print(".");
+                    if(itemTargetY >= 500) dropItem = false;
+                    itemTargetY = itemTargetY+50;
+                    itemTargetButton.setLocation(itemTargetX,itemTargetY);
+                    container.repaint();
+
                 }
                 System.out.println("ItemMode : End Drop Item");
                 container.remove(itemTargetButton);

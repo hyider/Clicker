@@ -21,6 +21,7 @@ public class MainScreen extends JFrame {
     public MainScreen() {
         setTitle("AimSimulator"); // 프로그램 타이틀 "AimSimulator"
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // 창을 닫으면 프로그램 종료
+        setAlwaysOnTop(true);
 
         Container container = getContentPane(); // 프레임에 부탁된 컨텐트팬 알아내기
         container.setBackground(backGroundColor); // 컨탠트팬의 색 backGroundColor 설정

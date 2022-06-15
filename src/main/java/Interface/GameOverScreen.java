@@ -16,6 +16,7 @@ public class GameOverScreen extends JFrame {
     public GameOverScreen() {
         setTitle("Game Over"); // 프로그램 타이틀 "Score"
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // 창을 닫으면 창이 사라짐
+        setAlwaysOnTop(true);
 
         Container container = getContentPane(); // 프레임에 부착된 컨텐트팬 알아내기
         container.setBackground(backGroundColor); // 컨텐트팬의 색 backGroundColor 설정
