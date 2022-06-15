@@ -20,7 +20,7 @@ public class ReadScreen extends JFrame {
         JLabel howLabel = new JLabel("How To Use"); // howLabel 라벨 문자열과 함께 생성
         settingBoldLabel(howLabel,10,0,300,50,40);
         container.add(howLabel); // 컨텐트팬에 howLabel 라벨 부착
-        /**
+
         String howText = """
                 Set the size and frequency of the target.
                 
@@ -45,15 +45,37 @@ public class ReadScreen extends JFrame {
                 (The score screen and the game over screen are different!)
                 """;
 
+        String howText1 = "Set the size and frequency of the target.\n" +
+                "\n" +
+                "[1] Default mode.\n" +
+                "Click on a stopped target to get a score.\n" +
+                "\n" +
+                "[2] Moving mode.\n" +
+                "Set the speed of the target.\n" +
+                "Click on the moving target to get a score.\n" +
+                "\n" +
+                "[3] Shied Mode.\n" +
+                "Set the defense of the target.\n" +
+                "Click on the target's shield as much as the defense and get a score.\n" +
+                "\n" +
+                "[4] Item mode.\n" +
+                "Set the item to drop speed of the target.\n" +
+                "Click on the items and get effect.\n" +
+                "\n" +
+                "The red hourglass increases three seconds.\n" +
+                "The blue hourglass decreases three seconds.\n" +
+                "Bomb is display the Game Over screen.\n" +
+                "(The score screen and the game over screen are different!)";
+
         JTextArea how = new JTextArea();
-        how.setText(howText); // JTextArea의 텍스트 howText로 전달
+        how.setText(howText1); // JTextArea의 텍스트 howText로 전달
         how.setFont(new Font("Slab Serif",Font.BOLD,13));
         how.setEditable(false); // JTextArea 수정 불가능
-        /**
+
         how.setLocation(10,40); // JTextArea의 위치 설정
         how.setSize(370,350); // JTextArea의 크기 설정
-        container.add(how);ㅇ
-         여기 위부터 주석처리 ㅇㅇ
+        container.add(how);
+
         JScrollPane howScroll = new JScrollPane(how);
         howScroll.setLocation(10,40);
         howScroll.setSize(370,350);
@@ -98,7 +120,7 @@ public class ReadScreen extends JFrame {
                 dispose();
             }
         });
-         */
+
 
         setSize(800,500); // 창의 크기 설정
         setResizable(false);

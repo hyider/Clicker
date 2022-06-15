@@ -123,11 +123,9 @@ public class StartScreen extends JFrame {
             this.timerStop = timerStop;
         }
 
-        // 쓰레드 실행 부분
+        // Timer 쓰레드 실행 부분
         public void run() {
-            /**
-             * 처음 시작 카운트 약 3초 대기
-             */
+            // 처음 시작 카운트 3초 대기
             try {
                 sleep(3000);
             } catch (InterruptedException e) {
@@ -136,7 +134,7 @@ public class StartScreen extends JFrame {
             while (true) {
                 /**
                  * 약 1초당 1씩 줄여가며 타임카운트 라벨 수정
-                 * 타이머 카운트가 0이 되면 타이머 쓰레드 종료
+                 * 타이머 카운트가 0 이하가 되면 타이머 쓰레드 종료
                  */
                 timeCount--; // 외부에서 설정된 타임카운트의 수 1줄임
                 if (timeCount < 0) timeCountLabel.setText("Time : 0"); // 줄인 숫자로 타임카운트라벨 수정
@@ -148,7 +146,7 @@ public class StartScreen extends JFrame {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                // 쓰레드 종료 여부 결정
+                // 타이머 쓰레드 종료 여부 결정
                 if (timerStop) {
                     timerStop = false;
                     return;
@@ -157,6 +155,7 @@ public class StartScreen extends JFrame {
         }
     }
 
+    // 메인 쓰레드 - 모든 쓰레드를 관리함
     class MainThread extends Thread {
         private Timer timer;
         private DefaultModeThread defaultModeThread;
@@ -350,13 +349,16 @@ public class StartScreen extends JFrame {
         }
     }
 
+    // DefaultModeThread 쓰레드
     class DefaultModeThread extends Thread {
-        private boolean defaultModeStop; // 쓰레드 종료 여부 결정 불린 변수
+        private boolean defaultModeStop; // 쓰레드 종료 여부 결정 변수
 
-        // MovingModeThread 쓰레드 종료하는 메서드
-        public void setDefaultModeStop(boolean defaultModeStop) { this.defaultModeStop = defaultModeStop; }
+        // DefaultModeThread 쓰레드 종료하는 메서드
+        public void setDefaultModeStop(boolean defaultModeStop) {
+            this.defaultModeStop = defaultModeStop;
+        }
 
-        // 쓰레드 실행 부분
+        // DefaultModeThread 쓰레드 실행 부분
         public void run() {
             while (true) {
                 // 쓰레드 종료 여부 결정
@@ -365,9 +367,7 @@ public class StartScreen extends JFrame {
                     return;
                 }
 
-                /**
-                 * 타겟의 위치 난수를 발생하여 설정
-                 */
+                // 타겟의 위치 난수로 받기
                 targetX = ((int)(Math.random() * 500) + 100);
                 targetY = ((int)(Math.random() * 450) + 150);
             }
@@ -390,10 +390,10 @@ public class StartScreen extends JFrame {
             this.movingModeStop = movingModeStop;
         }
 
-        // 쓰레드 실행 부분
+        // MovingModeThread 쓰레드 실행 부분
         public void run() {
             /**
-             * 타겟이 직선으로 또는 대각선으로 이동할 방향 정함
+             * 타겟이 직선으로 또는 대각선으로 이동할 방향 결정
              * 타겟이 x축으로 또는 y축으로 양수 또는 음수로 이동할지 결정
              */
             selectMoveToCrossOrDiagonal = ((int)(Math.random()*10))%2;
@@ -403,10 +403,8 @@ public class StartScreen extends JFrame {
                 // 쓰레드 종료 여부 결정
                 if (movingModeStop) {
                     movingModeStop = false;
-                    System.out.println("Kill Moving Mode!");
                     return;
                 }
-                System.out.println("Moving Mode Thread Run");
 
                 /**
                  * selectMoveToCrossOrDiagonal이 0면 직선, 1이면 대각선
@@ -499,17 +497,22 @@ public class StartScreen extends JFrame {
                 defense--;
             }
 
+            // Defense에 따라 Stack에 push한걸 Stack이 빌 때 까지 pop
             while (!stack.isEmpty()) {
                 int stackNum = (int) stack.pop() - 1;
                 aShieldTargetButton.get(stackNum).setBorderPainted(false);
                 aShieldTargetButton.get(stackNum).setContentAreaFilled(false);
-                aShieldTargetButton.get(stackNum).setSize((Controller.size + 10) * 5, (Controller.size + 10) * 5);
+                aShieldTargetButton.get(stackNum)
+                        .setSize((Controller.size + 10) * 5, (Controller.size + 10) * 5);
                 aShieldTargetButton.get(stackNum).setLocation(setTargetX, setTargetY);
                 container.add(aShieldTargetButton.get(stackNum));
                 container.repaint();
                 aShieldTargetButton.get(stackNum).addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        shield.stop();
+                        shield.setFramePosition(0);
+                        shield.start();
                         container.remove(aShieldTargetButton.get(stackNum));
                         container.repaint();
                     }

@@ -58,25 +58,9 @@ public class SettingModeScreen extends JFrame {
         if(movingModeSelected) {
             valueOfSpeed = new JLabel(String.valueOf(speed));
         } else valueOfSpeed = new JLabel("X");
+
         settingPlainLabel(valueOfSpeed,200,100,50,50,30); // 타임라벨 위치 재선정
         container.add(valueOfSpeed);
-
-        movingMode.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                movingModeSelected = !movingModeSelected;
-                if(movingModeSelected == true) {
-                    movingMode.setBackground(Color.BLUE);
-                    speedSlider.setEnabled(true);
-                    valueOfSpeed.setText(String.valueOf(speed));
-                } else {
-                    movingMode.setBackground(buttonColor);
-                    speedSlider.setEnabled(false);
-                    speedSlider.setValue(0);
-                    valueOfSpeed.setText("X");
-                }
-            }
-        });
 
         /**
          * 두번째 모드 : Shield_Mode
@@ -102,23 +86,6 @@ public class SettingModeScreen extends JFrame {
         settingPlainLabel(valueOfDefense,200,150,50,50,30); // 타임라벨 위치 재선정
         container.add(valueOfDefense);
 
-        shieldModeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                shieldModeSelected = !shieldModeSelected;
-                if(shieldModeSelected == true) {
-                    shieldModeButton.setBackground(Color.BLUE);
-                    defenseSlider.setEnabled(true);
-                    valueOfDefense.setText(String.valueOf(defense));
-                } else {
-                    shieldModeButton.setBackground(buttonColor);
-                    defenseSlider.setEnabled(false);
-                    defenseSlider.setValue(0);
-                    valueOfDefense.setText("X");
-                }
-            }
-        });
-
         /**
          * 세번째 모드
          */
@@ -142,14 +109,82 @@ public class SettingModeScreen extends JFrame {
         settingPlainLabel(valueOfItem,200,200,50,50,30); // 타임라벨 위치 재선정
         container.add(valueOfItem);
 
+        JLabel noti = new JLabel("Select only one mode.");
+        settingBoldLabel(noti,30,280,500,50,40);
+        container.add(noti);
+
+        movingMode.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                movingModeSelected = !movingModeSelected;
+                if(movingModeSelected) {
+                    movingMode.setBackground(Color.BLUE);
+                    speedSlider.setEnabled(true);
+                    valueOfSpeed.setText(String.valueOf(speed));
+                    shieldModeButton.setBackground(buttonColor);
+                    defenseSlider.setEnabled(false);
+                    defenseSlider.setValue(0);
+                    valueOfDefense.setText("X");
+                    itemModeButton.setBackground(buttonColor);
+                    itemSlider.setEnabled(false);
+                    itemSlider.setValue(0);
+                    valueOfItem.setText("X");
+                    shieldModeSelected = false;
+                    itemModeSelected = false;
+                } else {
+                    movingMode.setBackground(buttonColor);
+                    speedSlider.setEnabled(false);
+                    speedSlider.setValue(0);
+                    valueOfSpeed.setText("X");
+                }
+            }
+        });
+
+        shieldModeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                shieldModeSelected = !shieldModeSelected;
+                if(shieldModeSelected) {
+                    shieldModeButton.setBackground(Color.BLUE);
+                    defenseSlider.setEnabled(true);
+                    valueOfDefense.setText(String.valueOf(defense));
+                    movingMode.setBackground(buttonColor);
+                    speedSlider.setEnabled(false);
+                    speedSlider.setValue(0);
+                    valueOfSpeed.setText("X");
+                    itemModeButton.setBackground(buttonColor);
+                    itemSlider.setEnabled(false);
+                    itemSlider.setValue(0);
+                    valueOfItem.setText("X");
+                    movingModeSelected = false;
+                    itemModeSelected = false;
+                } else {
+                    shieldModeButton.setBackground(buttonColor);
+                    defenseSlider.setEnabled(false);
+                    defenseSlider.setValue(0);
+                    valueOfDefense.setText("X");
+                }
+            }
+        });
+
         itemModeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 itemModeSelected = !itemModeSelected;
-                if(itemModeSelected == true) {
+                if(itemModeSelected) {
                     itemModeButton.setBackground(Color.BLUE);
                     itemSlider.setEnabled(true);
                     valueOfItem.setText(String.valueOf(item));
+                    movingMode.setBackground(buttonColor);
+                    speedSlider.setEnabled(false);
+                    speedSlider.setValue(0);
+                    valueOfSpeed.setText("X");
+                    shieldModeButton.setBackground(buttonColor);
+                    defenseSlider.setEnabled(false);
+                    defenseSlider.setValue(0);
+                    valueOfDefense.setText("X");
+                    movingModeSelected = false;
+                    shieldModeSelected = false;
                 } else {
                     itemModeButton.setBackground(buttonColor);
                     itemSlider.setEnabled(false);

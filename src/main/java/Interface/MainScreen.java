@@ -14,7 +14,7 @@ import static Interface.Controller.*;
 public class MainScreen extends JFrame {
     public static JLabel title, version, modeJLabel; // 게임 모드를 나타내는 라벨
     public static JButton startButton, readButton, settingButton, quitButton;
-    public static Clip hit, miss, start, timeCountUp, timeCountDown, bombGameOver;
+    public static Clip hit, miss, start, shield, timeCountUp, timeCountDown, bombGameOver;
 
     public static int listIndex = 2018041089;
 
@@ -82,6 +82,8 @@ public class MainScreen extends JFrame {
             miss = AudioSystem.getClip();
             start = AudioSystem.getClip();
 
+            shield = AudioSystem.getClip();
+
             timeCountUp = AudioSystem.getClip();
             timeCountDown = AudioSystem.getClip();
             bombGameOver = AudioSystem.getClip();
@@ -89,6 +91,8 @@ public class MainScreen extends JFrame {
             File hitSoundFile = new File("src/main/resources/TargetClick.wav");
             File missSoundFile = new File("src/main/resources/BackgroundClick.wav");
             File startSoundFile = new File("src/main/resources/StartCount.wav");
+
+            File shieldSoundFile = new File("src/main/resources/Shield.wav");
 
             File timeCountUpSoundFile = new File("src/main/resources/TimeCountUp.wav");
             File timeCountDownSoundFile = new File("src/main/resources/TimeCountDown.wav");
@@ -98,6 +102,8 @@ public class MainScreen extends JFrame {
             AudioInputStream missAudioInputStream = AudioSystem.getAudioInputStream(missSoundFile);
             AudioInputStream startAudioInputStream = AudioSystem.getAudioInputStream(startSoundFile);
 
+            AudioInputStream shieldAudioInputStream = AudioSystem.getAudioInputStream(shieldSoundFile);
+
             AudioInputStream timeCountUpInputStream = AudioSystem.getAudioInputStream(timeCountUpSoundFile);
             AudioInputStream timeCountDownInputStream = AudioSystem.getAudioInputStream(timeCountDownSoundFile);
             AudioInputStream bombGameOverInputStream = AudioSystem.getAudioInputStream(bombGameOverSoundFile);
@@ -105,6 +111,8 @@ public class MainScreen extends JFrame {
             hit.open(hitAudioInputStream);
             miss.open(missAudioInputStream);
             start.open(startAudioInputStream);
+
+            shield.open(shieldAudioInputStream);
 
             timeCountUp.open(timeCountUpInputStream);
             timeCountDown.open(timeCountDownInputStream);
