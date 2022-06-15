@@ -20,23 +20,44 @@ public class ReadScreen extends JFrame {
         JLabel howLabel = new JLabel("How To Use"); // howLabel 라벨 문자열과 함께 생성
         settingBoldLabel(howLabel,10,0,300,50,40);
         container.add(howLabel); // 컨텐트팬에 howLabel 라벨 부착
-
+        /**
         String howText = """
+                Set the size and frequency of the target.
+                
                 [1] Default mode.
-                Set the size and frequency of the target
                 Click on a stopped target to get a score.
                                 
                 [2] Moving mode.
-                Set the size, frequency, and speed of the target
+                Set the speed of the target.
                 Click on the moving target to get a score.
+                
+                [3] Shied Mode.
+                Set the defense of the target.
+                Click on the target's shield as much as the defense and get a score.
+                
+                [4] Item mode.
+                Set the item to drop speed of the target.
+                Click on the items and get effect.
+                
+                The red hourglass increases three seconds.
+                The blue hourglass decreases three seconds.
+                Bomb is display the Game Over screen.
+                (The score screen and the game over screen are different!)
                 """;
+
         JTextArea how = new JTextArea();
         how.setText(howText); // JTextArea의 텍스트 howText로 전달
-        how.setFont(new Font("Slab Serif",Font.BOLD,15));
+        how.setFont(new Font("Slab Serif",Font.BOLD,13));
         how.setEditable(false); // JTextArea 수정 불가능
+        /**
         how.setLocation(10,40); // JTextArea의 위치 설정
         how.setSize(370,350); // JTextArea의 크기 설정
-        container.add(how);
+        container.add(how);ㅇ
+         여기 위부터 주석처리 ㅇㅇ
+        JScrollPane howScroll = new JScrollPane(how);
+        howScroll.setLocation(10,40);
+        howScroll.setSize(370,350);
+        container.add(howScroll);
 
         JLabel patchNoteLabel = new JLabel("Patch Note"); // patchNoteLabel 라벨 문자열과 함께 생성
         settingBoldLabel(patchNoteLabel,400,0,300,50,40);
@@ -48,10 +69,20 @@ public class ReadScreen extends JFrame {
                 
                 [0.2]
                 - Moving Mode
+                
+                [0.3]
+                - Shield Mode
+                
+                [0.4]
+                - Item Mode
+                
+                [Alpha - 1.0]
+                - Alpha Test
+                - Add Three Mode - Moving / Shield / Item
                 """;
         JTextArea patchNoteTextArea = new JTextArea();
         patchNoteTextArea.setText(patchNoteText); // JTextArea의 텍스트 howText로 전달
-        patchNoteTextArea.setFont(new Font("Slab Serif",Font.BOLD,10));
+        patchNoteTextArea.setFont(new Font("Slab Serif",Font.BOLD,13));
         patchNoteTextArea.setEditable(false); // JTextArea 수정 불가능
         patchNoteTextArea.setLocation(400,40); // JTextArea의 위치 설정
         patchNoteTextArea.setSize(375,350); // JTextArea의 크기 설정
@@ -67,6 +98,7 @@ public class ReadScreen extends JFrame {
                 dispose();
             }
         });
+         */
 
         setSize(800,500); // 창의 크기 설정
         setResizable(false);

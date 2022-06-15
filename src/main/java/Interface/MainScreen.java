@@ -14,7 +14,7 @@ import static Interface.Controller.*;
 public class MainScreen extends JFrame {
     public static JLabel title, version, modeJLabel; // 게임 모드를 나타내는 라벨
     public static JButton startButton, readButton, settingButton, quitButton;
-    public static Clip hit, miss, start;
+    public static Clip hit, miss, start, timeCountUp, timeCountDown, bombGameOver;
 
     public static int listIndex = 2018041089;
 
@@ -32,8 +32,8 @@ public class MainScreen extends JFrame {
         container.add(title);
 
         // ====[버젼]====================================================================================================
-        version = new JLabel("version_0.2"); // version 라벨 문자열과 함께 생성
-        settingItalicLabel(version,50,150,150,25,20);
+        version = new JLabel("version_alpha_1.0"); // version 라벨 문자열과 함께 생성
+        settingItalicLabel(version,50,150,500,25,20);
         container.add(version); // 컨텐트팬에 version 라벨 부착
 
         // ====[Mode_라벨]===============================================================================================
@@ -81,15 +81,35 @@ public class MainScreen extends JFrame {
             hit = AudioSystem.getClip();
             miss = AudioSystem.getClip();
             start = AudioSystem.getClip();
+
+            timeCountUp = AudioSystem.getClip();
+            timeCountDown = AudioSystem.getClip();
+            bombGameOver = AudioSystem.getClip();
+
             File hitSoundFile = new File("src/main/resources/TargetClick.wav");
             File missSoundFile = new File("src/main/resources/BackgroundClick.wav");
             File startSoundFile = new File("src/main/resources/StartCount.wav");
+
+            File timeCountUpSoundFile = new File("src/main/resources/TimeCountUp.wav");
+            File timeCountDownSoundFile = new File("src/main/resources/TimeCountDown.wav");
+            File bombGameOverSoundFile = new File("src/main/resources/BombGameOver.wav");
+
             AudioInputStream hitAudioInputStream = AudioSystem.getAudioInputStream(hitSoundFile);
             AudioInputStream missAudioInputStream = AudioSystem.getAudioInputStream(missSoundFile);
             AudioInputStream startAudioInputStream = AudioSystem.getAudioInputStream(startSoundFile);
+
+            AudioInputStream timeCountUpInputStream = AudioSystem.getAudioInputStream(timeCountUpSoundFile);
+            AudioInputStream timeCountDownInputStream = AudioSystem.getAudioInputStream(timeCountDownSoundFile);
+            AudioInputStream bombGameOverInputStream = AudioSystem.getAudioInputStream(bombGameOverSoundFile);
+
             hit.open(hitAudioInputStream);
             miss.open(missAudioInputStream);
             start.open(startAudioInputStream);
+
+            timeCountUp.open(timeCountUpInputStream);
+            timeCountDown.open(timeCountDownInputStream);
+            bombGameOver.open(bombGameOverInputStream);
+
             start.start();
             start.stop();
         } catch (UnsupportedAudioFileException e) {

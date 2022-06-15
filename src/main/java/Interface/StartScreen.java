@@ -19,12 +19,13 @@ public class StartScreen extends JFrame {
 
     public static boolean stopGame = false;
     public static boolean gameOver = false;
+    public static boolean dropItem = true;
 
     public static int defense = Controller.defense;
 
     public static int targetX, targetY;
     public static int setTargetX, setTargetY;
-    public static int itemTargetX, itemTargetY;
+    public static int itemTargetX = 0, itemTargetY;
 
     public static JButton targetButton;
     public static JButton itemTargetButton;
@@ -42,6 +43,7 @@ public class StartScreen extends JFrame {
     public StartScreen() {
         setTitle("Start");
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        setAlwaysOnTop(true);
 
         Container container = getContentPane();
         container.setLayout(null);
@@ -91,6 +93,7 @@ public class StartScreen extends JFrame {
 
         // 화면 구성
         settingScreen(800,800,false,null,true);
+        if(itemModeSelected) setSize(1000,800);
 
 
         // 타이머 쓰레드 객체 생성 및 쓰레드 실행
@@ -190,6 +193,8 @@ public class StartScreen extends JFrame {
             setTargetX = targetX;
             setTargetY = targetY;
 
+            if(itemTargetX == 0) return;
+
             if(itemModeSelected) {
                 if(checkSameLocation(setTargetX,setTargetY,itemTargetX,itemTargetY)) {
                     setLocationTarget();
@@ -257,6 +262,7 @@ public class StartScreen extends JFrame {
                 if (timeCount <= 0 || stopGame == true) { // 타임카운트가 0이 되면
                     System.out.println("[1] 게임끝!");
                     dispose(); // 창 닫힘
+                    dropItem = false;
                     MainScreen.start.setFramePosition(0);
                     ScoreScreen.percent = ((double)hitCount/(double)totalCount)*100; // 맞춘 퍼센트 ScoreScreen에 전달
                     ScoreScreen.totalCount = totalCount; // 총 타겟 출현 갯수 ScoreScreen에 전달
@@ -265,7 +271,10 @@ public class StartScreen extends JFrame {
                     timeCount = Controller.time; // 타임 카운트에 처음 설정된 타임 값 전달
                     stopGame = false;
 
-                    if (gameOver) new ReadScreen();
+                    if (gameOver) {
+                        gameOver = false;
+                        new ReadScreen();
+                    }
                     else new ScoreScreen(); // ScoreScreen 실행
                     hitCount = 0; // 타겟 클릭 횟수 0으로 초기화
                     missCount = 0; // 타겟 외 클릭 횟수 0으로 초기화
@@ -282,7 +291,9 @@ public class StartScreen extends JFrame {
                 /**
                  * 아이템 타겟 충돌 검사기 생성
                  */
-                setLocationTarget();
+                //setLocationTarget();
+                setTargetX = targetX;
+                setTargetY = targetY;
 
                 /**
                  * 모드 실행여부 검사 후 실행
@@ -542,20 +553,21 @@ public class StartScreen extends JFrame {
         }
 
         public boolean checkSameLocation(int defaultLocationX, int defaultLocationY, int itemLocationX, int itemLocationY) {
-            if(defaultLocationX <= itemLocationX && itemLocationX <= defaultLocationX + (Controller.size+10)*5)
+            if((defaultLocationX - (Controller.size+10)*5 < itemLocationX) && (itemLocationX < defaultLocationX))
                 return true;
-            if(defaultLocationY <= itemLocationY && itemLocationY <= defaultLocationY + (Controller.size+10)*5)
+            if((defaultLocationY - (Controller.size+10)*5 < itemLocationY) && (itemLocationY < defaultLocationY))
                 return true;
             return false;
         }
 
         public void setLocationItemTarget() {
+            System.out.println("Check Location...");
             itemTargetX = ((int)(Math.random() * 500) + 100);
             itemTargetY = ((int)(Math.random() * 450) + 150);
 
             if(checkSameLocation(targetX,targetY,itemTargetX,itemTargetY)) {
-                setLocationItemTarget();
-                return;
+                System.out.println("Wrong Location!!!");
+                //setLocationItemTarget();
             }
         }
 
@@ -571,11 +583,13 @@ public class StartScreen extends JFrame {
             while(true) {
                 if(itemModeStop) {
                     itemModeStop = false;
+                    System.out.println("ItemMode Thread Stop");
                     return;
                 }
-
+                System.out.println("ItemMode Thread Start");
+                dropItem = true;
                 // 아이템 위치 잡기
-                setLocationItemTarget();
+
 
                 // 아이템 선택
                 selectItem = ((int)(Math.random() * 3));
@@ -597,21 +611,26 @@ public class StartScreen extends JFrame {
                 ImageIcon itemTargetRollover = new ImageIcon(itemTargetRolloverScale);
                 ImageIcon itemTargetPressed = new ImageIcon(itemTargetPressedScale);
 
+                itemTargetX = 930 - (Controller.size + 10) * 5;
+                itemTargetY = 50;
+
                 itemTargetButton = new JButton();
                 itemTargetButton.setIcon(itemTarget);
                 itemTargetButton.setRolloverIcon(itemTargetRollover);
                 itemTargetButton.setPressedIcon(itemTargetPressed);
                 itemTargetButton.setSize((Controller.size + 10) * 5, (Controller.size + 10) * 5);
-                itemTargetButton.setLocation(itemTargetX, itemTargetY);
+                itemTargetButton.setLocation(itemTargetX,itemTargetY);
                 itemTargetButton.setBorderPainted(false);
                 itemTargetButton.setContentAreaFilled(false);
 
                 container.add(itemTargetButton);
                 container.repaint();
 
+
+
                 /**
-                 * case 0 -> Time Count Up      => 시간을 5 늘려줌
-                 * case 1 -> Time Count Down    => 시간을 5 줄여줌
+                 * case 0 -> Time Count Up      => 시간을 3 늘어남
+                 * case 1 -> Time Count Down    => 시간을 3 줄어듬
                  * case 2 -> Game Over          => 게임 오버
                  */
                 switch (selectItem) {
@@ -620,7 +639,12 @@ public class StartScreen extends JFrame {
                             @Override
                             public void actionPerformed(ActionEvent e) {
                                 container.remove(itemTargetButton);
-                                timeCount = timeCount + 5;
+                                timeCountUp.start();
+                                timeCountUp.setFramePosition(0);
+                                timeCount = timeCount + 3;
+                                timeCountLabel.setText("Time : " + timeCount);
+                                container.repaint();
+                                dropItem = false;
                             }
                         });
                         break;
@@ -629,7 +653,13 @@ public class StartScreen extends JFrame {
                             @Override
                             public void actionPerformed(ActionEvent e) {
                                 container.remove(itemTargetButton);
-                                timeCount = timeCount - 5;
+                                timeCountDown.start();
+                                timeCountDown.setFramePosition(0);
+                                timeCount = timeCount - 3;
+                                if(timeCount < 0) timeCountLabel.setText("Time : 0");
+                                else timeCountLabel.setText("Time : " + timeCount);
+                                container.repaint();
+                                dropItem = false;
                             }
                         });
                         break;
@@ -638,8 +668,11 @@ public class StartScreen extends JFrame {
                             @Override
                             public void actionPerformed(ActionEvent e) {
                                 container.remove(itemTargetButton);
+                                bombGameOver.start();
+                                bombGameOver.setFramePosition(0);
                                 stopGame = true;
                                 gameOver = true;
+                                dropItem = false;
                             }
                         });
                         break;
@@ -647,13 +680,24 @@ public class StartScreen extends JFrame {
                 /**
                  * 아이템 타겟 생성주기 설정
                  */
-                try {
-                    sleep(defaultFrequency);
-                    container.remove(itemTargetButton);
+                System.out.println("ItemMode : Start Drop Item");
+                while(dropItem) {
+                    System.out.print(".");
+                    if(itemTargetY > 600) dropItem = false;
+                    itemTargetY++;
+                    itemTargetButton.setLocation(itemTargetX,itemTargetY);
                     container.repaint();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    try {
+                        sleep(Controller.item+50);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
+                System.out.println("ItemMode : End Drop Item");
+                container.remove(itemTargetButton);
+                container.repaint();
+
+
             }
         }
     }
