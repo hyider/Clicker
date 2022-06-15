@@ -272,7 +272,7 @@ public class StartScreen extends JFrame {
 
                     if (gameOver) {
                         gameOver = false;
-                        new ReadScreen();
+                        new GameOverScreen();
                     }
                     else new ScoreScreen(); // ScoreScreen 실행
                     hitCount = 0; // 타겟 클릭 횟수 0으로 초기화
@@ -629,15 +629,8 @@ public class StartScreen extends JFrame {
                 container.add(itemTargetButton);
                 container.repaint();
 
-
-
-                /**
-                 * case 0 -> Time Count Up      => 시간을 3 늘어남
-                 * case 1 -> Time Count Down    => 시간을 3 줄어듬
-                 * case 2 -> Game Over          => 게임 오버
-                 */
                 switch (selectItem) {
-                    case 0:
+                    case 0: // Time Count Up => 시간을 3 늘어남
                         itemTargetButton.addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
@@ -651,7 +644,7 @@ public class StartScreen extends JFrame {
                             }
                         });
                         break;
-                    case 1:
+                    case 1: // Time Count Down => 시간을 3 줄어듬
                         itemTargetButton.addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
@@ -666,7 +659,7 @@ public class StartScreen extends JFrame {
                             }
                         });
                         break;
-                    case 2:
+                    case 2: // Game Over => 게임 오버
                         itemTargetButton.addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
